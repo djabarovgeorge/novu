@@ -53,7 +53,6 @@
 
 
 
-
 import { execSync } from 'child_process';
 
 const submoduleDir = 'enterprise/packages'
@@ -81,7 +80,11 @@ try {
   runCommand('git commit -m "chore: update versions"',submoduleDir);
   runCommand('git push',submoduleDir);
 
-  console.log("Step 3: Run lerna version in monorepo to commit and create a release");
+  console.log("Step 3: Commit all changes in monorepo");
+  runCommand('git add .');
+  runCommand('git commit -m "chore: update versions"');
+
+  console.log("Step 4: Run lerna version in monorepo to commit and create a release");
   try{
     runCommand('pnpm lerna version patch --yes --create-release github');
   }
