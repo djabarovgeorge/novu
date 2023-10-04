@@ -1,7 +1,10 @@
 import { execSync } from 'child_process';
 
+
+const submoduleDir = 'enterprise/packages'
+
 function runCommand(command: string, directory?: string) {
-  console.log(`Running command: ${command}`);
+  console.log(`Running command: ${command}, directory:${directory}`);
   execSync(command, {
     stdio: 'inherit',
     cwd: directory,
@@ -21,19 +24,19 @@ try {
   runCommand('pnpm install');
 
   console.log("Step 2: Push changes in submodule");
-  runCommand('pwd');
-  runCommand('cd enterprise/packages');
-  runCommand('pwd');
-  runCommand('ls -la');
+  runCommand('pwd', submoduleDir);
+  // runCommand('cd enterprise/packages');
+  // runCommand('pwd');
+  // runCommand('ls -la');
 
-  runCommand('git status');
-  runCommand('git add .');
-  runCommand('git status');
+  runCommand('git status',submoduleDir);
+  runCommand('git add .',submoduleDir);
+  runCommand('git status',submoduleDir);
   
-  runCommand('git commit -m "chore: update versions"');
-  runCommand('git push');
-  runCommand('cd ../../');
-  runCommand('pwd');
+  runCommand('git commit -m "chore: update versions"',submoduleDir);
+  runCommand('git push',submoduleDir);
+  // runCommand('cd ../../');
+  // runCommand('pwd');
 
 
   // console.log("Step 2: Push changes in submodule");
