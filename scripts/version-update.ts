@@ -17,7 +17,7 @@ try {
     runCommand('pnpm lerna version patch --yes --no-push');
   }
     catch(error){  
-      console.error(`Error: ${error.message}`);
+      console.error(`Error: ${error}`);
   }
 
   console.log("Step 2: Push changes in submodule");
@@ -40,7 +40,7 @@ try {
     runCommand('pnpm lerna version patch --yes --create-release github');
   }
     catch(error){  
-      console.error(`Error: ${error.message}`);
+      console.error(`Error: ${error}`);
   }
 
   
