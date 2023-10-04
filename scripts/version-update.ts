@@ -12,9 +12,10 @@ function runCommand(command: string, directory?: string) {
 }
 
 try {
+
   console.log("Step 1: Run lerna version in monorepo");
   try{
-    runCommand('pnpm lerna version patch --yes --no-push');
+    runCommand('pnpm lerna version patch --yes --no-push --ignore-changes');
   }
     catch(error){  
       console.error(`Error: ${error}`);
@@ -37,7 +38,7 @@ try {
 
   console.log("Step 10: Run lerna version in monorepo push and release");
   try{
-    runCommand('pnpm lerna version patch --yes --create-release github');
+    runCommand('pnpm lerna version patch --yes --create-release github --ignore-changes');
   }
     catch(error){  
       console.error(`Error: ${error}`);
