@@ -17,10 +17,7 @@ try {
       console.error(`Error: ${error.message}`);
   }
 
-  console.log("Step 2: Navigate to submodule and update version");
-  runCommand('npm version patch', 'enterprise/packages/digest-schedule');
-
-  console.log("Step 3: Install dependencies and push changes in submodule");
+  console.log("Step 2: Install dependencies and push changes in submodule");
   runCommand('pnpm install');
   runCommand('cd', 'enterprise/packages');
   runCommand('git add .', 'enterprise/packages/digest-schedule');
@@ -28,7 +25,7 @@ try {
   runCommand('git push');
   runCommand('cd', '../../');
 
-  console.log("Step 4: Navigate back to monorepo and update submodule reference");
+  console.log("Step 3: Navigate back to monorepo and update submodule reference");
   runCommand('git add enterprise/packages');
   runCommand('git commit -m "Update submodule reference"');
   runCommand('git push');
