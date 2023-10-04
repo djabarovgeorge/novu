@@ -10,7 +10,12 @@ function runCommand(command: string, directory?: string) {
 
 try {
   console.log("Step 1: Run lerna version in monorepo");
-  runCommand('pnpm lerna version patch');
+  try{
+    runCommand('pnpm lerna version patch');
+  }
+    catch(error){  
+      console.error(`Error: ${error.message}`);
+  }
 
   console.log("Step 2: Navigate to submodule and update version");
   runCommand('npm version patch', 'enterprise/packages/digest-schedule');
@@ -27,7 +32,12 @@ try {
   runCommand('git push');
 
   console.log("Step 5: Run lerna version again in monorepo");
-  runCommand('pnpm lerna version patch');
+  try{
+    runCommand('pnpm lerna version patch');
+  }
+  catch(error){  
+    console.error(`Error: ${error.message}`);
+  }
 } catch (error) {
   console.error(`Error: ${error.message}`);
 }
