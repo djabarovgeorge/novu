@@ -1,6 +1,6 @@
 {
   "name": "@novu/api",
-  "version": "0.20.3",
+  "version": "0.20.4",
   "description": "description",
   "author": "",
   "private": "true",
@@ -39,12 +39,12 @@
     "@nestjs/platform-express": "^10.2.2",
     "@nestjs/swagger": "^7.1.8",
     "@nestjs/terminus": "^10.0.1",
-    "@novu/application-generic": "^0.20.2",
-    "@novu/dal": "^0.20.2",
-    "@novu/node": "^0.20.2",
-    "@novu/shared": "^0.20.2",
-    "@novu/stateless": "^0.20.2",
-    "@novu/testing": "^0.20.2",
+    "@novu/application-generic": "^0.20.4",
+    "@novu/dal": "^0.20.4",
+    "@novu/node": "^0.20.4",
+    "@novu/shared": "^0.20.4",
+    "@novu/stateless": "^0.20.4",
+    "@novu/testing": "^0.20.4",
     "@sendgrid/mail": "^7.6.0",
     "@sentry/hub": "^7.40.0",
     "@sentry/node": "^7.40.0",
@@ -111,7 +111,7 @@
     "typescript": "4.9.5"
   },
   "optionalDependencies": {
-    "@novu/ee-auth": "^0.20.0"
+    "@novu/ee-auth": "^0.20.4"
   },
   "nx": {
     "implicitDependencies": [
