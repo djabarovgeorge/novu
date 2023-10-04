@@ -35,7 +35,7 @@ try {
   // runCommand('git commit -m "chore: update versions"');
   // runCommand('git push');
 
-
+  console.log("Step 10: Run lerna version in monorepo push and release");
   try{
     runCommand('pnpm lerna version patch --yes --create-release github');
   }
