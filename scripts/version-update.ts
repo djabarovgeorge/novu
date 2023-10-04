@@ -52,8 +52,9 @@
 // }
 
 
-
 import { execSync } from 'child_process';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 const submoduleDir = 'enterprise/packages'
 
@@ -75,22 +76,23 @@ try {
       console.error(`Error: ${error}`);
   }
 
+  const lernaJson = JSON.parse(readFileSync(join(__dirname, '../lerna.json'), 'utf-8'));
+  const newVersion = lernaJson.version;
+
   console.log("Step 2: Push changes in submodule");
   runCommand('git add .',submoduleDir);
   runCommand('git commit -m "chore: update versions"',submoduleDir);
   runCommand('git push',submoduleDir);
+  runCommand(`git tag v${newVersion}`,submoduleDir);
+  runCommand('git push --tags',submoduleDir);
 
   console.log("Step 3: Commit all changes in monorepo");
   runCommand('git add .');
   runCommand('git commit -m "chore: update versions"');
 
-  console.log("Step 4: Run lerna version in monorepo to commit and create a release");
-  try{
-    runCommand('pnpm lerna version patch --yes --create-release github');
-  }
-    catch(error){  
-      console.error(`Error: ${error}`);
-  }
+  console.log("Step 5: Add a GitHub release tag");
+  runCommand(`git tag v${newVersion}`);
+  runCommand('git push --tags');
 
 } catch (error) {
   console.error(`Error: ${error}`);
