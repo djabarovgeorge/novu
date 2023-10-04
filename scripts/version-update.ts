@@ -16,27 +16,25 @@ try {
     catch(error){  
       console.error(`Error: ${error.message}`);
   }
-
-  console.log("Step 2: Install dependencies and push changes in submodule");
+  
+  console.log("Step 1.1: Install dependencies");
   runCommand('pnpm install');
+
+  console.log("Step 2: Push changes in submodule");
   runCommand('cd', 'enterprise/packages');
-  runCommand('git add .', 'enterprise/packages/digest-schedule');
-  runCommand('git commit -m "Update version"');
+  runCommand('git add .');
+  runCommand('git commit -m "Update versions"');
   runCommand('git push');
   runCommand('cd', '../../');
 
-  console.log("Step 3: Navigate back to monorepo and update submodule reference");
+  console.log("Step 3: Update commit&push submodule reference");
   runCommand('git add enterprise/packages');
   runCommand('git commit -m "Update submodule reference"');
   runCommand('git push');
 
-  console.log("Step 4: Navigate back to monorepo and update submodule reference");
-  runCommand('git add enterprise/packages');
-  runCommand('git commit -m "Update submodule reference"');
-  runCommand('git push');
-
-  console.log("Step 5: Push changes in monorepo");
-  runCommand('git commit -m "Update version"');
+  console.log("Step 4: Update commit&push monorepo versions");
+  runCommand('git add .');
+  runCommand('git commit -m "Update versions"');
   runCommand('git push');
 
   try{
