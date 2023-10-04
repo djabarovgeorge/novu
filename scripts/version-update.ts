@@ -38,12 +38,6 @@ try {
   runCommand('git commit -m "chore: update versions"');
   runCommand('git push');
 
-  try{
-    runCommand('pnpm lerna version patch  --yes');
-  }
-  catch(error){  
-    console.error(`Error: ${error.message}`);
-  }
 } catch (error) {
   console.error(`Error: ${error.message}`);
 }
