@@ -22,27 +22,38 @@ try {
 
   console.log("Step 2: Push changes in submodule");
   runCommand('cd enterprise/packages');
+  runCommand('ls -la');
+  runCommand('git status');
   runCommand('git add .');
-  runCommand('git commit -m "chore: update versions"');
+  runCommand('git status');
+  runCommand('git commit -m "core: update versions"');
   runCommand('git push');
   runCommand('cd ../../');
 
-  console.log("Step 3: Update commit&push submodule reference");
-  runCommand('git add enterprise/packages');
-  runCommand('git commit -m "core: update submodule reference"');
-  runCommand('git push');
 
-  console.log("Step 4: Update commit&push monorepo versions");
-  runCommand('git add .');
-  runCommand('git commit -m "chore: update versions"');
-  runCommand('git push');
+  // console.log("Step 2: Push changes in submodule");
+  // runCommand('cd enterprise/packages');
+  // runCommand('git add .');
+  // runCommand('git commit -m "core: update versions"');
+  // runCommand('git push');
+  // runCommand('cd ../../');
 
-  try{
-    runCommand('pnpm lerna version patch  --yes');
-  }
-  catch(error){  
-    console.error(`Error: ${error.message}`);
-  }
+  // console.log("Step 3: Update commit&push submodule reference");
+  // runCommand('git add enterprise/packages');
+  // runCommand('git commit -m "core: update submodule reference"');
+  // runCommand('git push');
+
+  // console.log("Step 4: Update commit&push monorepo versions");
+  // runCommand('git add .');
+  // runCommand('git commit -m "core: update versions"');
+  // runCommand('git push');
+
+  // try{
+  //   runCommand('pnpm lerna version patch  --yes');
+  // }
+  // catch(error){  
+  //   console.error(`Error: ${error.message}`);
+  // }
 } catch (error) {
   console.error(`Error: ${error.message}`);
 }
