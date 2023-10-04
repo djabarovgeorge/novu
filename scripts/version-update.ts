@@ -23,7 +23,7 @@ try {
   console.log("Step 2: Push changes in submodule");
   runCommand('cd enterprise/packages');
   runCommand('git add .');
-  runCommand('git commit -m "core: update versions"');
+  runCommand('git commit -m "chore: update versions"');
   runCommand('git push');
   runCommand('cd ../../');
 
@@ -34,7 +34,7 @@ try {
 
   console.log("Step 4: Update commit&push monorepo versions");
   runCommand('git add .');
-  runCommand('git commit -m "core: update versions"');
+  runCommand('git commit -m "chore: update versions"');
   runCommand('git push');
 
   try{
