@@ -21,11 +21,11 @@ try {
   runCommand('pnpm install');
 
   console.log("Step 2: Push changes in submodule");
-  runCommand('cd', 'enterprise/packages');
+  runCommand('cd enterprise/packages');
   runCommand('git add .');
   runCommand('git commit -m "Update versions"');
   runCommand('git push');
-  runCommand('cd', '../../');
+  runCommand('cd ../../');
 
   console.log("Step 3: Update commit&push submodule reference");
   runCommand('git add enterprise/packages');
