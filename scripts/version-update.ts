@@ -23,18 +23,18 @@ try {
   console.log("Step 2: Push changes in submodule");
   runCommand('cd enterprise/packages');
   runCommand('git add .');
-  runCommand('git commit -m "Update versions"');
+  runCommand('git commit -m "core: update versions"');
   runCommand('git push');
   runCommand('cd ../../');
 
   console.log("Step 3: Update commit&push submodule reference");
   runCommand('git add enterprise/packages');
-  runCommand('git commit -m "Update submodule reference"');
+  runCommand('git commit -m "core: update submodule reference"');
   runCommand('git push');
 
   console.log("Step 4: Update commit&push monorepo versions");
   runCommand('git add .');
-  runCommand('git commit -m "Update versions"');
+  runCommand('git commit -m "core: update versions"');
   runCommand('git push');
 
   try{
