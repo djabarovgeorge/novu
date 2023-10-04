@@ -17,7 +17,7 @@ try {
 
   console.log("Step 1: Run lerna version in monorepo");
   try{
-    runCommand('pnpm lerna version patch --yes --no-git-tag-version--no-push --force-publish');
+    runCommand('pnpm lerna version patch --yes --no-git-tag-version --no-push --force-publish');
   }
     catch(error){  
       console.error(`Error: ${error}`);
