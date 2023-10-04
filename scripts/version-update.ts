@@ -21,17 +21,27 @@ try {
   runCommand('npm version patch', 'enterprise/packages/digest-schedule');
 
   console.log("Step 3: Install dependencies and push changes in submodule");
-  runCommand('pnpm install', 'enterprise/packages/digest-schedule');
+  runCommand('pnpm install');
+  runCommand('cd', 'enterprise/packages');
   runCommand('git add .', 'enterprise/packages/digest-schedule');
-  runCommand('git commit -m "Update version"', 'enterprise/packages/digest-schedule');
-  runCommand('git push', 'enterprise/packages/digest-schedule');
+  runCommand('git commit -m "Update version"');
+  runCommand('git push');
+  runCommand('cd', '../../');
 
   console.log("Step 4: Navigate back to monorepo and update submodule reference");
-  runCommand('git add enterprise/packages/digest-schedule');
+  runCommand('git add enterprise/packages');
   runCommand('git commit -m "Update submodule reference"');
   runCommand('git push');
 
-  console.log("Step 5: Run lerna version again in monorepo");
+  console.log("Step 4: Navigate back to monorepo and update submodule reference");
+  runCommand('git add enterprise/packages');
+  runCommand('git commit -m "Update submodule reference"');
+  runCommand('git push');
+
+  console.log("Step 5: Push changes in monorepo");
+  runCommand('git commit -m "Update version"');
+  runCommand('git push');
+
   try{
     runCommand('pnpm lerna version patch');
   }
