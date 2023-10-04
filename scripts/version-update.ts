@@ -1,5 +1,7 @@
 import { execSync } from 'child_process';
+import * as lerna from 'lerna';
 
+console.log(lerna)
 
 const submoduleDir = 'enterprise/packages'
 
@@ -15,7 +17,7 @@ try {
 
   console.log("Step 1: Run lerna version in monorepo");
   try{
-    runCommand('pnpm lerna version patch --yes --no-push --force-publish');
+    runCommand('pnpm lerna version patch --yes --no-git-tag-version--no-push --force-publish');
   }
     catch(error){  
       console.error(`Error: ${error}`);
@@ -38,7 +40,7 @@ try {
 
   console.log("Step 10: Run lerna version in monorepo push and release");
   try{
-    runCommand('pnpm lerna version patch --yes --create-release github --force-publish');
+    runCommand('pnpm lerna version patch --yes --create-release github');
   }
     catch(error){  
       console.error(`Error: ${error}`);
