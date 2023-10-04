@@ -11,7 +11,7 @@ function runCommand(command: string, directory?: string) {
 try {
   console.log("Step 1: Run lerna version in monorepo");
   try{
-    runCommand('pnpm lerna version patch');
+    runCommand('pnpm lerna version patch --yes');
   }
     catch(error){  
       console.error(`Error: ${error.message}`);
@@ -38,7 +38,7 @@ try {
   runCommand('git push');
 
   try{
-    runCommand('pnpm lerna version patch');
+    runCommand('pnpm lerna version patch  --yes');
   }
   catch(error){  
     console.error(`Error: ${error.message}`);
