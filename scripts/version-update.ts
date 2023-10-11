@@ -32,7 +32,8 @@ function runCommand(command: string, directory?: string) {
     }
 
     console.log('Step 2: Run lerna version in monorepo without committing or creating a release');
-    runCommand('pnpm lerna version patch --yes --no-git-tag-version');
+    runCommand('pnpm lerna version patch --yes --no-push');
+    // runCommand('pnpm lerna version patch --yes --no-git-tag-version --no-push');
 
     console.log('Step 3: Extract new version from lerna json file');
     const lernaJson = JSON.parse(readFileSync(join(__dirname, '../lerna.json'), 'utf-8'));
