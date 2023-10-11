@@ -20,12 +20,11 @@ function runCommand(command: string, directory?: string) {
     const gitStatus = execSync('git status --porcelain', { cwd: submoduleDir }).toString();
     if (gitStatus) {
       console.error(
-        'There are uncommitted changes in the git repository at ' +
+        'Working tree has uncommitted changes in submodule git' +
           submoduleDir +
-          ', please commit or stash them before running this script.'
+          ', please commit or remove the following changes before continuing:\n' +
+          gitStatus
       );
-
-      console.log('The uncommitted changes are:\n' + gitStatus);
 
       return;
     } else {
@@ -33,7 +32,7 @@ function runCommand(command: string, directory?: string) {
     }
 
     console.log('Step 2: Run lerna version in monorepo without committing or creating a release');
-    runCommand('pnpm lerna version patch --yes --no-git-tag-version --no-push');
+    runCommand('pnpm lerna version patch --yes --no-git-tag-version');
 
     console.log('Step 3: Extract new version from lerna json file');
     const lernaJson = JSON.parse(readFileSync(join(__dirname, '../lerna.json'), 'utf-8'));

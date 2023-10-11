@@ -1,6 +1,6 @@
 {
   "name": "@novu/apns",
-  "version": "0.20.10",
+  "version": "0.20.11",
   "description": "A apns wrapper for novu",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -36,7 +36,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@novu/stateless": "^0.20.10",
+    "@novu/stateless": "^0.20.11",
     "@parse/node-apn": "^5.2.3"
   },
   "devDependencies": {

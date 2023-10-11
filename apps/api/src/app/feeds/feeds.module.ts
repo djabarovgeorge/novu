@@ -13,3 +13,6 @@ import { AuthModule } from '../auth/auth.module';
   exports: [...USE_CASES],
 })
 export class FeedsModule {}
+
+// eslint-disable-next-line no-console
+console.log();
