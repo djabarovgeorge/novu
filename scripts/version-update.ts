@@ -26,7 +26,7 @@ try {
   runCommand('git commit -m "chore: update versions"', submoduleDir);
   runCommand('git push', submoduleDir);
 
-  console.log('Step 4: Create realease tag for submodule');
+  console.log('Step 4: Create release tag for submodule');
   runCommand(`git tag v${newVersion}`, submoduleDir);
   runCommand('git push --tags', submoduleDir);
 
@@ -34,7 +34,7 @@ try {
   runCommand('git add .');
   runCommand('git commit -m "chore: update versions"');
 
-  console.log('Step 6: Create realease tag for main repo and push');
+  console.log('Step 6: Create release tag for main repo and push');
   runCommand(`git tag v${newVersion}`);
   runCommand('git push --tags');
 } catch (error) {
