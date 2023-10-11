@@ -1,6 +1,6 @@
 {
   "name": "@novu/embed",
-  "version": "0.20.8",
+  "version": "0.20.9",
   "private": true,
   "description": "",
   "keywords": [],
@@ -118,7 +118,7 @@
     "typescript": "4.9.5"
   },
   "dependencies": {
-    "@novu/notification-center": "^0.20.8",
+    "@novu/notification-center": "^0.20.9",
     "@types/iframe-resizer": "^3.5.8",
     "iframe-resizer": "^4.3.1"
   }

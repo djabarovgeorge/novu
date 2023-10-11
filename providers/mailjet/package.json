@@ -1,6 +1,6 @@
 {
   "name": "@novu/mailjet",
-  "version": "0.20.8",
+  "version": "0.20.9",
   "description": "A mailjet wrapper for novu",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -32,7 +32,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@novu/stateless": "^0.20.8",
+    "@novu/stateless": "^0.20.9",
     "node-mailjet": "^6.0.4"
   },
   "devDependencies": {

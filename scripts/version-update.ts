@@ -48,6 +48,7 @@ function runCommand(command: string, directory?: string) {
     console.log('Step 6: Commit version changes and submodule updated hash main repository');
     runCommand('git add .');
     runCommand('git commit -m "chore: update versions"');
+    runCommand('git push');
 
     console.log('Step 7: Create release tag for main repo and push');
     runCommand(`git tag v${newVersion}`);
