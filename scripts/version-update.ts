@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -26,10 +28,12 @@ function runCommand(command: string, directory?: string) {
       console.log('The uncommitted changes are:\n' + gitStatus);
 
       return;
+    } else {
+      console.log('No uncommitted changes in submodule git found');
     }
 
     console.log('Step 2: Run lerna version in monorepo without committing or creating a release');
-    runCommand('pnpm lerna version patch --yes --no-git-tag-version --no-push --force-publish');
+    runCommand('pnpm lerna version patch --yes --no-git-tag-version --no-push');
 
     console.log('Step 3: Extract new version from lerna json file');
     const lernaJson = JSON.parse(readFileSync(join(__dirname, '../lerna.json'), 'utf-8'));
