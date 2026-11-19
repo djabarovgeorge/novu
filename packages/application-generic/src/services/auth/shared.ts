@@ -1,5 +1,6 @@
+import { env } from '../../config';
 export const buildOauthRedirectUrl = (request): string => {
-  let url = process.env.FRONT_BASE_URL + '/auth/login';
+  let url = env.FRONT_BASE_URL + '/auth/login';
 
   if (!request.user || !request.user.token) {
     return `${url}?error=AuthenticationError`;

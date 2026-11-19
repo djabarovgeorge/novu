@@ -1,6 +1,7 @@
 import Analytics from 'analytics-node';
 import { Logger } from '@nestjs/common';
 import * as Mixpanel from 'mixpanel';
+import { env } from '../config';
 
 // Due to problematic analytics-node types, we need to use require
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -34,8 +35,8 @@ export class AnalyticsService {
       });
     }
 
-    if (process.env.MIXPANEL_TOKEN) {
-      this.mixpanel = Mixpanel.init(process.env.MIXPANEL_TOKEN);
+    if (env.MIXPANEL_TOKEN) {
+      this.mixpanel = Mixpanel.init(env.MIXPANEL_TOKEN);
     }
   }
 
@@ -170,10 +171,10 @@ export class AnalyticsService {
   }
 
   private get segmentEnabled() {
-    return process.env.NODE_ENV !== 'test' && this.segment;
+    return env.NODE_ENV !== 'test' && this.segment;
   }
 
   private get mixpanelEnabled() {
-    return process.env.NODE_ENV !== 'test' && this.mixpanel;
+    return env.NODE_ENV !== 'test' && this.mixpanel;
   }
 }

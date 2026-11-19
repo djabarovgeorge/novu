@@ -18,6 +18,7 @@ import {
   GetUseMergedDigestId,
 } from '../usecases';
 import { SubscriberProcessQueueService } from '../services/queues/subscriber-process-queue.service';
+import { env } from '../config';
 
 export const featureFlagsService = {
   provide: FeatureFlagsService,
@@ -103,7 +104,7 @@ export const cacheService = {
   provide: CacheService,
   useFactory: async (): Promise<CacheService> => {
     const enableAutoPipelining =
-      process.env.REDIS_CACHE_ENABLE_AUTOPIPELINING === 'false';
+      env.REDIS_CACHE_ENABLE_AUTOPIPELINING === 'false';
     const factoryInMemoryProviderService = inMemoryProviderService.useFactory(
       InMemoryProviderEnum.ELASTICACHE,
       enableAutoPipelining
@@ -120,7 +121,7 @@ export const cacheService = {
 export const analyticsService = {
   provide: AnalyticsService,
   useFactory: async () => {
-    const service = new AnalyticsService(process.env.SEGMENT_TOKEN);
+    const service = new AnalyticsService(env.SEGMENT_TOKEN);
     await service.initialize();
 
     return service;

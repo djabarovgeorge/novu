@@ -12,6 +12,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { CalculateLimitNovuIntegration } from '../calculate-limit-novu-integration';
 
 import { GetNovuProviderCredentialsCommand } from './get-novu-provider-credentials.command';
+import { env } from '../../config';
 
 @Injectable()
 export class GetNovuProviderCredentials {
@@ -59,7 +60,7 @@ export class GetNovuProviderCredentials {
 
     if (integration.providerId === EmailProviderIdEnum.Novu) {
       return {
-        apiKey: process.env.NOVU_EMAIL_INTEGRATION_API_KEY,
+        apiKey: env.NOVU_EMAIL_INTEGRATION_API_KEY,
         from: 'no-reply@novu.co',
         senderName: 'Novu',
         ipPoolName: 'Demo',
@@ -68,9 +69,9 @@ export class GetNovuProviderCredentials {
 
     if (integration.providerId === SmsProviderIdEnum.Novu) {
       return {
-        accountSid: process.env.NOVU_SMS_INTEGRATION_ACCOUNT_SID,
-        token: process.env.NOVU_SMS_INTEGRATION_TOKEN,
-        from: process.env.NOVU_SMS_INTEGRATION_SENDER,
+        accountSid: env.NOVU_SMS_INTEGRATION_ACCOUNT_SID,
+        token: env.NOVU_SMS_INTEGRATION_TOKEN,
+        from: env.NOVU_SMS_INTEGRATION_SENDER,
       };
     }
 

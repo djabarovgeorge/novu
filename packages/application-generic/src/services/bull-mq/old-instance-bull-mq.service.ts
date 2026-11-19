@@ -24,6 +24,7 @@ import {
   InMemoryProviderService,
 } from '../in-memory-provider';
 import { IRedisProviderConfig } from '../in-memory-provider/providers/redis-provider';
+import { env } from '../../config';
 
 interface IQueueMetrics {
   completed: Metrics;
@@ -43,8 +44,7 @@ export class OldInstanceBullMqService {
   private inMemoryProviderService: InMemoryProviderService;
   public enabled: boolean;
 
-  public static readonly pro: boolean =
-    process.env.NOVU_MANAGED_SERVICE !== undefined;
+  public static readonly pro: boolean = env.NOVU_MANAGED_SERVICE !== undefined;
 
   constructor() {
     if (this.shouldInstantiate()) {
@@ -59,8 +59,7 @@ export class OldInstanceBullMqService {
 
   private shouldInstantiate(): boolean {
     const shouldInstantiate =
-      !process.env.IS_DOCKER_HOSTED &&
-      !!process.env.MEMORY_DB_CLUSTER_SERVICE_HOST;
+      !env.IS_DOCKER_HOSTED && !!env.MEMORY_DB_CLUSTER_SERVICE_HOST;
 
     Logger.warn(
       { shouldInstantiate },

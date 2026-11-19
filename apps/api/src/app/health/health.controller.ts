@@ -6,6 +6,7 @@ import {
   DalServiceHealthIndicator,
   StandardQueueServiceHealthIndicator,
   WorkflowQueueServiceHealthIndicator,
+  env,
 } from '@novu/application-generic';
 
 import { version } from '../../../package.json';
@@ -38,7 +39,7 @@ export class HealthController {
       },
     ];
 
-    if (process.env.ELASTICACHE_CLUSTER_SERVICE_HOST) {
+    if (env.ELASTICACHE_CLUSTER_SERVICE_HOST) {
       checks.push(async () => this.cacheHealthIndicator.isHealthy());
     }
 

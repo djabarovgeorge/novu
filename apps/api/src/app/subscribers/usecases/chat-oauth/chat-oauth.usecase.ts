@@ -6,6 +6,7 @@ import { IntegrationEntity, IntegrationRepository, EnvironmentRepository, ICrede
 import { ChatOauthCommand } from './chat-oauth.command';
 import { createHash } from '../../../shared/helpers/hmac.service';
 import { ApiException } from '../../../shared/exceptions/api.exception';
+import { env } from '@novu/application-generic';
 
 @Injectable()
 export class ChatOauth {
@@ -61,7 +62,7 @@ export class ChatOauth {
     integrationIdentifier?: string
   ): string {
     let redirectUri =
-      process.env.API_ROOT_URL +
+      env.API_ROOT_URL +
       `/v1/subscribers/${subscriberId}/credentials/slack/oauth/callback?environmentId=${environmentId}`;
 
     if (integrationIdentifier) {

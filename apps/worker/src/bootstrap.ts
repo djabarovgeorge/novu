@@ -6,20 +6,19 @@ import { INestApplication, Logger, NestInterceptor, ValidationPipe } from '@nest
 import { NestFactory } from '@nestjs/core';
 import * as bodyParser from 'body-parser';
 import * as Sentry from '@sentry/node';
-import { BullMqService, getErrorInterceptor, Logger as PinoLogger } from '@novu/application-generic';
+import { BullMqService, getErrorInterceptor, Logger as PinoLogger, env, validateEnv } from '@novu/application-generic';
 
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './app/shared/response.interceptor';
-import { validateEnv } from './config/env-validator';
 import { prepareAppInfra, startAppInfra } from './app/workflow/services/cold-start.service';
 import * as packageJson from '../package.json';
 
 const extendedBodySizeRoutes = ['/v1/events', '/v1/notification-templates', '/v1/layouts'];
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    dsn: env.SENTRY_DSN,
+    environment: env.NODE_ENV,
     release: `v${packageJson.version}`,
     ignoreErrors: ['Non-Error exception captured'],
     integrations: [
@@ -30,7 +29,7 @@ if (process.env.SENTRY_DSN) {
 }
 
 // Validate the ENV variables after launching SENTRY, so missing variables will report to sentry
-validateEnv();
+validateEnv('worker');
 
 export async function bootstrap(): Promise<INestApplication> {
   BullMqService.haveProInstalled();
@@ -42,7 +41,7 @@ export async function bootstrap(): Promise<INestApplication> {
 
   await prepareAppInfra(app);
 
-  if (process.env.SENTRY_DSN) {
+  if (env.SENTRY_DSN) {
     app.use(Sentry.Handlers.requestHandler());
     app.use(Sentry.Handlers.tracingHandler());
   }
@@ -71,11 +70,11 @@ export async function bootstrap(): Promise<INestApplication> {
 
   Logger.log('BOOTSTRAPPED SUCCESSFULLY');
 
-  await app.listen(process.env.PORT);
+  await app.listen(env.PORT);
 
   await startAppInfra(app);
 
-  Logger.log(`Started application in NODE_ENV=${process.env.NODE_ENV} on port ${process.env.PORT}`);
+  Logger.log(`Started application in NODE_ENV=${env.NODE_ENV} on port ${env.PORT}`);
 
   return app;
 }

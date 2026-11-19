@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { OrganizationRepository, UserRepository, MemberRepository, IAddMemberData } from '@novu/dal';
 import { MemberStatusEnum } from '@novu/shared';
 import { Novu } from '@novu/node';
-import { AnalyticsService } from '@novu/application-generic';
+import { AnalyticsService, env } from '@novu/application-generic';
 
 import { ApiException } from '../../../shared/exceptions/api.exception';
 import { InviteMemberCommand } from './invite-member.command';
@@ -34,11 +34,11 @@ export class InviteMember {
 
     const token = createGuid();
 
-    if (process.env.NOVU_API_KEY && (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'production')) {
-      const novu = new Novu(process.env.NOVU_API_KEY);
+    if (env.NOVU_API_KEY && (env.NODE_ENV === 'dev' || env.NODE_ENV === 'production')) {
+      const novu = new Novu(env.NOVU_API_KEY);
 
       // cspell:disable-next
-      await novu.trigger(process.env.NOVU_TEMPLATEID_INVITE_TO_ORGANISATION || 'invite-to-organization-wBnO8NpDn', {
+      await novu.trigger(env.NOVU_TEMPLATEID_INVITE_TO_ORGANISATION, {
         to: {
           subscriberId: command.email,
           email: command.email,
@@ -48,7 +48,7 @@ export class InviteMember {
           inviteeName: capitalize(command.email.split('@')[0]),
           organizationName: capitalize(organization.name),
           inviterName: capitalize(inviterUser.firstName ?? ''),
-          acceptInviteUrl: `${process.env.FRONT_BASE_URL}/auth/invitation/${token}`,
+          acceptInviteUrl: `${env.FRONT_BASE_URL}/auth/invitation/${token}`,
         },
       });
     }

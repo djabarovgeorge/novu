@@ -3,12 +3,13 @@ import { testServer } from '@novu/testing';
 import * as sinon from 'sinon';
 
 import { bootstrap } from '../src/bootstrap';
+import { env } from '@novu/application-generic';
 
 const dalService = new DalService();
 
 before(async () => {
   await testServer.create(await bootstrap());
-  await dalService.connect(process.env.MONGO_URL);
+  await dalService.connect(env.MONGO_URL);
 });
 
 after(async () => {

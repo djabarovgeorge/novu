@@ -31,11 +31,12 @@ import { TopicsModule } from './app/topics/topics.module';
 import { InboundParseModule } from './app/inbound-parse/inbound-parse.module';
 import { BlueprintModule } from './app/blueprint/blueprint.module';
 import { TenantModule } from './app/tenant/tenant.module';
+import { env } from '@novu/application-generic';
 
 const enterpriseImports = (): Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> => {
   const modules: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> = [];
   try {
-    if (process.env.NOVU_MANAGED_SERVICE === 'true' || process.env.CI_EE_TEST === 'true') {
+    if (env.NOVU_MANAGED_SERVICE === 'true' || env.CI_EE_TEST === 'true') {
       modules.push(require('@novu/ee-auth')?.EEAuthModule);
     }
   } catch (e) {
@@ -80,7 +81,7 @@ const modules = baseModules.concat(enterpriseModules);
 
 const providers: Provider[] = [];
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   modules.push(RavenModule);
   providers.push({
     provide: APP_INTERCEPTOR,
@@ -97,7 +98,7 @@ if (process.env.SENTRY_DSN) {
   });
 }
 
-if (process.env.NODE_ENV === 'test') {
+if (env.NODE_ENV === 'test') {
   modules.push(TestingModule);
 }
 

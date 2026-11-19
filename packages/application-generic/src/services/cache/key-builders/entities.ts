@@ -7,6 +7,7 @@ import {
   OrgScopePrefixEnum,
   prefixWrapper,
 } from './shared';
+import { env } from '../../../config';
 
 const buildSubscriberKey = ({
   subscriberId,
@@ -86,7 +87,7 @@ const buildGroupedBlueprintsKey = (): string =>
     type: CacheKeyTypeEnum.ENTITY,
     keyEntity: CacheKeyPrefixEnum.GROUPED_BLUEPRINTS,
     environmentIdPrefix: OrgScopePrefixEnum.ORGANIZATION_ID,
-    environmentId: process.env.BLUEPRINT_CREATOR,
+    environmentId: env.BLUEPRINT_CREATOR,
     identifierPrefix: IdentifierPrefixEnum.GROUPED_BLUEPRINT,
     identifier: BLUEPRINT_IDENTIFIER,
   });

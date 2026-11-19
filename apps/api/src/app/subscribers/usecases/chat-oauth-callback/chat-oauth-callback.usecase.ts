@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 
-import { CreateSubscriber, CreateSubscriberCommand, decryptCredentials } from '@novu/application-generic';
+import { CreateSubscriber, CreateSubscriberCommand, decryptCredentials, env } from '@novu/application-generic';
 import { ICredentialsDto } from '@novu/shared';
 import {
   ChannelTypeEnum,
@@ -98,7 +98,7 @@ export class ChatOauthCallback {
     integrationCredentials: ICredentialsDto
   ): Promise<string> {
     let redirectUri =
-      process.env.API_ROOT_URL +
+      env.API_ROOT_URL +
       `/v1/subscribers/${command.subscriberId}/credentials/${command.providerId}/oauth/callback?environmentId=${command.environmentId}`;
 
     if (command.integrationIdentifier) {

@@ -1,6 +1,7 @@
 import { ISmsOptions, ISmsProvider } from '@novu/stateless';
 import { ChannelTypeEnum, ICredentials } from '@novu/shared';
 import { ISmsHandler } from '../interfaces';
+import { env } from '../../../config';
 
 export abstract class BaseSmsHandler implements ISmsHandler {
   protected provider: ISmsProvider;
@@ -19,7 +20,7 @@ export abstract class BaseSmsHandler implements ISmsHandler {
   }
 
   async send(options: ISmsOptions) {
-    if (process.env.NODE_ENV === 'test') {
+    if (env.NODE_ENV === 'test') {
       throw new Error(
         'Currently 3rd-party packages test are not support on test env'
       );

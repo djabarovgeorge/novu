@@ -4,7 +4,7 @@ import { UserSession } from '@novu/testing';
 import { ChannelTypeEnum, EmailBlockTypeEnum } from '@novu/shared';
 import { LayoutRepository, OrganizationRepository, DalService } from '@novu/dal';
 
-import { CompileEmailTemplate } from '@novu/application-generic';
+import { CompileEmailTemplate, env } from '@novu/application-generic';
 import { CompileEmailTemplateCommand } from '@novu/application-generic';
 import { CompileTemplate } from '@novu/application-generic';
 import { GetLayoutUseCase } from '@novu/application-generic';
@@ -30,7 +30,7 @@ describe('Compile E-mail Template', function () {
         {
           provide: DalService,
           useFactory: async () => {
-            await dalService.connect(process.env.MONGO_URL);
+            await dalService.connect(env.MONGO_URL);
 
             return dalService;
           },

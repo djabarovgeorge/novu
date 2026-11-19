@@ -7,6 +7,7 @@ import { SeedDataCommand } from './usecases/seed-data/seed-data.command';
 import { CreateSession } from './usecases/create-session/create-session.usecase';
 import { CreateSessionCommand } from './usecases/create-session/create-session.command';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { env } from '@novu/application-generic';
 
 @Controller('/testing')
 @ApiExcludeController()
@@ -19,7 +20,7 @@ export class TestingController {
 
   @Post('/clear-db')
   async clearDB(@Body() body: SeedDataBodyDto): Promise<{ ok: boolean }> {
-    if (process.env.NODE_ENV !== 'test') throw new NotFoundException();
+    if (env.NODE_ENV !== 'test') throw new NotFoundException();
 
     await this.dalService.destroy();
 
@@ -34,7 +35,7 @@ export class TestingController {
    */
   @Post('/session')
   async getSession(@Body() body: SeedDataBodyDto): Promise<ISeedDataResponseDto> {
-    if (process.env.NODE_ENV !== 'test') throw new NotFoundException();
+    if (env.NODE_ENV !== 'test') throw new NotFoundException();
     const command = CreateSessionCommand.create({});
 
     return await this.createSessionUsecase.execute(command);
@@ -42,7 +43,7 @@ export class TestingController {
 
   @Post('/seed')
   async seedData(@Body() body: SeedDataBodyDto): Promise<{ password_user: IUserEntity }> {
-    if (process.env.NODE_ENV !== 'test') throw new NotFoundException();
+    if (env.NODE_ENV !== 'test') throw new NotFoundException();
     const command = SeedDataCommand.create({});
 
     return await this.seedDataUsecase.execute(command);

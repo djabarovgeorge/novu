@@ -5,6 +5,7 @@ import { Novu } from '@novu/node';
 import { ApiException } from '../../../shared/exceptions/api.exception';
 import { ResendInviteCommand } from './resend-invite.command';
 import { capitalize, createGuid } from '../../../shared/services/helper/helper.service';
+import { env } from '@novu/application-generic';
 
 @Injectable({
   scope: Scope.REQUEST,
@@ -33,11 +34,11 @@ export class ResendInvite {
 
     const token = createGuid();
 
-    if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'production') {
-      const novu = new Novu(process.env.NOVU_API_KEY ?? '');
+    if (env.NODE_ENV === 'dev' || env.NODE_ENV === 'production') {
+      const novu = new Novu(env.NOVU_API_KEY ?? '');
 
       // cspell:disable-next
-      await novu.trigger(process.env.NOVU_TEMPLATEID_INVITE_TO_ORGANISATION || 'invite-to-organization-wBnO8NpDn', {
+      await novu.trigger(env.NOVU_TEMPLATEID_INVITE_TO_ORGANISATION, {
         to: {
           subscriberId: foundInvitee.invite.email,
           email: foundInvitee.invite.email,
@@ -47,7 +48,7 @@ export class ResendInvite {
           inviteeName: capitalize(foundInvitee.invite.email.split('@')[0]),
           organizationName: capitalize(organization.name),
           inviterName: capitalize(inviterUser.firstName ?? ''),
-          acceptInviteUrl: `${process.env.FRONT_BASE_URL}/auth/invitation/${token}`,
+          acceptInviteUrl: `${env.FRONT_BASE_URL}/auth/invitation/${token}`,
         },
       });
     }

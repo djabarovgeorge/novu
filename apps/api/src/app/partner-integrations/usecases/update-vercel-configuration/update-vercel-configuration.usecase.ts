@@ -7,6 +7,7 @@ import { GetVercelConfigurationCommand } from '../get-vercel-configuration/get-v
 import { GetVercelConfiguration } from '../get-vercel-configuration/get-vercel-configuration.usecase';
 import { GetVercelProjects } from '../get-vercel-projects/get-vercel-projects.usecase';
 import { UpdateVercelConfigurationCommand } from './update-vercel-configuration.command';
+import { env } from '@novu/application-generic';
 
 interface IBaseEnvironment {
   token: string;
@@ -160,7 +161,7 @@ export class UpdateVercelConfiguration {
     teamId,
     token,
   }: ISetEnvironment): Promise<void> {
-    const projectApiUrl = `${process.env.VERCEL_BASE_URL}/v9/projects`;
+    const projectApiUrl = `${env.VERCEL_BASE_URL}/v9/projects`;
     const target = ['production', 'preview', 'development'];
     const type = 'encrypted';
 
@@ -206,7 +207,7 @@ export class UpdateVercelConfiguration {
     removedProjectIds: string[]
   ) {
     const response = await lastValueFrom(
-      this.httpService.get(`${process.env.VERCEL_BASE_URL}/v4/projects${teamId ? `?teamId=${teamId}` : ''}`, {
+      this.httpService.get(`${env.VERCEL_BASE_URL}/v4/projects${teamId ? `?teamId=${teamId}` : ''}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -265,7 +266,7 @@ export class UpdateVercelConfiguration {
     teamId,
     token,
   }: IUpdateEnvironment): Promise<void> {
-    const projectApiUrl = `${process.env.VERCEL_BASE_URL}/v9/projects`;
+    const projectApiUrl = `${env.VERCEL_BASE_URL}/v9/projects`;
 
     await Promise.all(
       projectDetails.map((detail) => {
@@ -316,7 +317,7 @@ export class UpdateVercelConfiguration {
     teamId,
     token,
   }: IRemoveEnvironment): Promise<void> {
-    const projectApiUrl = `${process.env.VERCEL_BASE_URL}/v9/projects`;
+    const projectApiUrl = `${env.VERCEL_BASE_URL}/v9/projects`;
 
     await Promise.all(
       removedProjectDetails.map((detail) => {

@@ -22,6 +22,7 @@ import {
   SelectIntegration,
   SelectIntegrationCommand,
   GetNovuProviderCredentials,
+  env,
 } from '@novu/application-generic';
 
 import { SendMessageType } from './send-message-type.usecase';
@@ -84,7 +85,7 @@ export abstract class SendMessageBase extends SendMessageType {
   }
 
   protected storeContent(): boolean {
-    return this.channelType === ChannelTypeEnum.IN_APP || process.env.STORE_NOTIFICATION_CONTENT === 'true';
+    return this.channelType === ChannelTypeEnum.IN_APP || env.STORE_NOTIFICATION_CONTENT === 'true';
   }
 
   protected async sendErrorHandlebars(job: JobEntity, error: string) {

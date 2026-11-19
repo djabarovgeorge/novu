@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { differenceInHours, differenceInSeconds, parseISO } from 'date-fns';
 import { Novu } from '@novu/node';
 import { UserRepository, UserEntity, IUserResetTokenCount } from '@novu/dal';
-import { buildUserKey, InvalidateCacheService } from '@novu/application-generic';
+import { buildUserKey, InvalidateCacheService, env } from '@novu/application-generic';
 
 import { normalizeEmail } from '../../../shared/helpers/email-normalization.service';
 import { PasswordResetRequestCommand } from './password-reset-request.command';
@@ -35,16 +35,16 @@ export class PasswordResetRequest {
       const resetTokenCount = this.getUpdatedRequestCount(foundUser);
       await this.userRepository.updatePasswordResetToken(foundUser._id, token, resetTokenCount);
 
-      if ((process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'production') && process.env.NOVU_API_KEY) {
-        const novu = new Novu(process.env.NOVU_API_KEY);
+      if ((env.NODE_ENV === 'dev' || env.NODE_ENV === 'production') && env.NOVU_API_KEY) {
+        const novu = new Novu(env.NOVU_API_KEY);
 
-        novu.trigger(process.env.NOVU_TEMPLATEID_PASSWORD_RESET || 'password-reset-llS-wzWMq', {
+        novu.trigger(env.NOVU_TEMPLATEID_PASSWORD_RESET, {
           to: {
             subscriberId: foundUser._id,
             email: foundUser.email,
           },
           payload: {
-            resetPasswordLink: `${process.env.FRONT_BASE_URL}/auth/reset/${token}`,
+            resetPasswordLink: `${env.FRONT_BASE_URL}/auth/reset/${token}`,
           },
         });
       }

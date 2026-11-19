@@ -1,4 +1,5 @@
 import * as sgApi from '@sendgrid/mail';
+import { env } from '@novu/application-generic';
 
 export type IEmailRecipient = string | { name?: string; email: string };
 
@@ -21,12 +22,12 @@ export class MailService {
   private sendgrid = sgApi;
 
   constructor() {
-    this.sendgrid.setApiKey(process.env.SENDGRID_API_KEY ?? '');
+    this.sendgrid.setApiKey(env.SENDGRID_API_KEY ?? '');
   }
 
   async sendMail(mail: ISendMail) {
     if (!mail.templateId && !mail.subject) throw new Error('Either templateId or subject must be present');
-    if (process.env.NODE_ENV === 'test') return null;
+    if (env.NODE_ENV === 'test') return null;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mailObject: any = {

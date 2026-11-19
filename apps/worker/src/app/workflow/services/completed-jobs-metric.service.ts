@@ -3,6 +3,7 @@ import {
   CompletedJobsMetricWorkerService,
   QueueBaseService,
   WorkerOptions,
+  env,
 } from '@novu/application-generic';
 import * as process from 'process';
 import { JobTopicNameEnum } from '@novu/shared';
@@ -20,7 +21,7 @@ export class CompletedJobsMetricService {
   public readonly completedJobsMetricWorkerService: CompletedJobsMetricWorkerService;
 
   constructor(@Inject('BULLMQ_LIST') private tokenList: QueueBaseService[]) {
-    if (process.env.NOVU_MANAGED_SERVICE === 'true' && process.env.NEW_RELIC_LICENSE_KEY) {
+    if (env.NOVU_MANAGED_SERVICE === 'true' && env.NEW_RELIC_LICENSE_KEY) {
       this.completedJobsMetricQueueService = new CompletedJobsMetricQueueService();
       this.completedJobsMetricWorkerService = new CompletedJobsMetricWorkerService();
 
@@ -28,7 +29,7 @@ export class CompletedJobsMetricService {
       this.completedJobsMetricWorkerService.createWorker(this.getWorkerProcessor(), this.getWorkerOptions());
 
       this.completedJobsMetricWorkerService.worker.on('completed', async (job) => {
-        await checkingForCronJob(process.env.COMPLETED_CRON_ID);
+        await checkingForCronJob(env.COMPLETED_CRON_ID);
         Logger.verbose('Metric Completed Job', job.id, LOG_CONTEXT);
       });
 
@@ -89,7 +90,7 @@ export class CompletedJobsMetricService {
     return async () => {
       return await new Promise<void>(async (resolve, reject): Promise<void> => {
         Logger.verbose('metric job started', LOG_CONTEXT);
-        const deploymentName = process.env.FLEET_NAME ?? 'default';
+        const deploymentName = env.FLEET_NAME;
 
         try {
           for (const queueService of this.tokenList) {
@@ -97,7 +98,7 @@ export class CompletedJobsMetricService {
             const completeNumber = metrics.completed.count;
             const failNumber = metrics.failed.count;
 
-            Logger.verbose('active length', process.env.NEW_RELIC_LICENSE_KEY.length);
+            Logger.verbose('active length', env.NEW_RELIC_LICENSE_KEY?.length);
             Logger.verbose('Recording active, waiting, and delayed metrics');
 
             const nr = require('newrelic');

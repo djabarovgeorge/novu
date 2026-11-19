@@ -8,20 +8,17 @@ import {
 import { startOfMonth, endOfMonth } from 'date-fns';
 
 import { CalculateLimitNovuIntegrationCommand } from './calculate-limit-novu-integration.command';
+import { env } from '../../config';
 
 @Injectable()
 export class CalculateLimitNovuIntegration {
   constructor(private messageRepository: MessageRepository) {}
 
-  static MAX_NOVU_INTEGRATION_MAIL_REQUESTS = parseInt(
-    process.env.MAX_NOVU_INTEGRATION_MAIL_REQUESTS || '300',
-    10
-  );
+  static MAX_NOVU_INTEGRATION_MAIL_REQUESTS =
+    env.MAX_NOVU_INTEGRATION_MAIL_REQUESTS;
 
-  static MAX_NOVU_INTEGRATION_SMS_REQUESTS = parseInt(
-    process.env.MAX_NOVU_INTEGRATION_SMS_REQUESTS || '20',
-    10
-  );
+  static MAX_NOVU_INTEGRATION_SMS_REQUESTS =
+    env.MAX_NOVU_INTEGRATION_SMS_REQUESTS;
 
   async execute(
     command: CalculateLimitNovuIntegrationCommand
@@ -30,16 +27,16 @@ export class CalculateLimitNovuIntegration {
 
     if (
       channelType === ChannelTypeEnum.EMAIL &&
-      !process.env.NOVU_EMAIL_INTEGRATION_API_KEY
+      !env.NOVU_EMAIL_INTEGRATION_API_KEY
     ) {
       return;
     }
 
     if (
       channelType === ChannelTypeEnum.SMS &&
-      !process.env.NOVU_SMS_INTEGRATION_ACCOUNT_SID &&
-      !process.env.NOVU_SMS_INTEGRATION_TOKEN &&
-      !process.env.NOVU_SMS_INTEGRATION_SENDER
+      !env.NOVU_SMS_INTEGRATION_ACCOUNT_SID &&
+      !env.NOVU_SMS_INTEGRATION_TOKEN &&
+      !env.NOVU_SMS_INTEGRATION_SENDER
     ) {
       return;
     }

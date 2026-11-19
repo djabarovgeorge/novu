@@ -19,6 +19,7 @@ import {
   InMemoryProviderEnum,
   InMemoryProviderService,
 } from '../in-memory-provider';
+import { env } from '../../config';
 
 interface IQueueMetrics {
   completed: Metrics;
@@ -48,8 +49,7 @@ export class BullMqService {
   private _worker: Worker;
   private inMemoryProviderService: InMemoryProviderService;
 
-  public static readonly pro: boolean =
-    process.env.NOVU_MANAGED_SERVICE !== undefined;
+  public static readonly pro: boolean = env.NOVU_MANAGED_SERVICE !== undefined;
 
   constructor() {
     this.inMemoryProviderService = new InMemoryProviderService(
@@ -66,7 +66,7 @@ export class BullMqService {
    * mapping in the /in-memory-provider/providers/index.ts
    */
   private selectProvider(): InMemoryProviderEnum {
-    if (process.env.IS_DOCKER_HOSTED) {
+    if (env.IS_DOCKER_HOSTED) {
       return InMemoryProviderEnum.REDIS;
     }
 

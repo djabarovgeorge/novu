@@ -4,6 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { OrganizationRepository } from '@novu/dal';
 import { GetVercelProjectsCommand } from './get-vercel-projects.command';
 import { ApiException } from '../../../shared/exceptions/api.exception';
+import { env } from '@novu/application-generic';
 
 interface IGetVercelConfiguration {
   userId: string;
@@ -62,7 +63,7 @@ export class GetVercelProjects {
     }
 
     const response = await lastValueFrom(
-      this.httpService.get(`${process.env.VERCEL_BASE_URL}/v4/projects${queryParams ? `?${queryParams}` : ''}`, {
+      this.httpService.get(`${env.VERCEL_BASE_URL}/v4/projects${queryParams ? `?${queryParams}` : ''}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

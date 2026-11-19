@@ -17,6 +17,7 @@ import {
 } from './types';
 
 import { GetIsInMemoryClusterModeEnabled } from '../../usecases';
+import { env } from '../../config';
 
 const LOG_CONTEXT = 'InMemoryProviderService';
 
@@ -74,13 +75,8 @@ export class InMemoryProviderService {
 
   public async delayUntilReadiness(): Promise<void> {
     let times = 0;
-    const retries = process.env
-      .IN_MEMORY_PROVIDER_SERVICE_READINESS_TIMEOUT_RETRIES
-      ? Number(process.env.IN_MEMORY_PROVIDER_SERVICE_READINESS_TIMEOUT_RETRIES)
-      : 10;
-    const timeout = process.env.IN_MEMORY_PROVIDER_SERVICE_READINESS_TIMEOUT
-      ? Number(process.env.IN_MEMORY_PROVIDER_SERVICE_READINESS_TIMEOUT)
-      : 100;
+    const retries = env.IN_MEMORY_PROVIDER_SERVICE_READINESS_TIMEOUT_RETRIES;
+    const timeout = env.IN_MEMORY_PROVIDER_SERVICE_READINESS_TIMEOUT;
 
     while (times <= retries && !this.isClientReady()) {
       times += 1;

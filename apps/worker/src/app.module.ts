@@ -7,6 +7,7 @@ import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-refe
 import { SharedModule } from './app/shared/shared.module';
 import { HealthModule } from './app/health/health.module';
 import { WorkflowModule } from './app/workflow/workflow.module';
+import { env } from '@novu/application-generic';
 
 const modules: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
   SharedModule,
@@ -16,7 +17,7 @@ const modules: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardRefe
 
 const providers: Provider[] = [];
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   modules.push(RavenModule);
   providers.push({
     provide: APP_INTERCEPTOR,

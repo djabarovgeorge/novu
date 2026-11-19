@@ -5,6 +5,7 @@ import { EnvironmentEntity, EnvironmentRepository } from '@novu/dal';
 import { GetMxRecordCommand } from './get-mx-record.command';
 import { GetMxRecordResponseDto } from '../../dtos/get-mx-record.dto';
 import { ApiException } from '../../../shared/exceptions/api.exception';
+import { env } from '@novu/application-generic';
 
 @Injectable({
   scope: Scope.REQUEST,
@@ -13,16 +14,16 @@ export class GetMxRecord {
   constructor(private environmentRepository: EnvironmentRepository) {}
 
   async execute(command: GetMxRecordCommand): Promise<GetMxRecordResponseDto> {
-    const env = await this.environmentRepository.findOne({ _id: command.environmentId });
-    if (!env) throw new ApiException('Environment is not found');
+    const environment = await this.environmentRepository.findOne({ _id: command.environmentId });
+    if (!environment) throw new ApiException('Environment is not found');
 
-    const inboundParseDomain = env.dns?.inboundParseDomain;
+    const inboundParseDomain = environment.dns?.inboundParseDomain;
 
     if (!inboundParseDomain) return { mxRecordConfigured: false };
 
     const mxRecordExist = await this.checkMxRecordExistence(inboundParseDomain);
     const res: GetMxRecordResponseDto = { mxRecordConfigured: mxRecordExist };
-    const updateNotNeeded = mxRecordExist === env.dns?.mxRecordConfigured;
+    const updateNotNeeded = mxRecordExist === environment.dns?.mxRecordConfigured;
 
     if (updateNotNeeded) return res;
 
@@ -47,7 +48,7 @@ export class GetMxRecord {
 
   private async checkMxRecordExistence(inboundParseDomain: string) {
     const relativeDnsRecords = await this.getMxRecords(inboundParseDomain);
-    const INBOUND_DOMAIN = process.env.MAIL_SERVER_DOMAIN?.replace('https://', '').replace('/', '');
+    const INBOUND_DOMAIN = env.MAIL_SERVER_DOMAIN?.replace('https://', '').replace('/', '');
     if (!INBOUND_DOMAIN) {
       throw new ApiException('MAIL_SERVER_DOMAIN is not defined as an environment variable');
     }

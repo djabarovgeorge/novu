@@ -8,6 +8,7 @@ import {
 } from 'nestjs-pino';
 import { storage, Store } from 'nestjs-pino/storage';
 import { sensitiveFields } from './masking';
+import { env } from '../config';
 export * from './LogDecorator';
 
 export function getErrorInterceptor(): NestInterceptor {
@@ -34,7 +35,7 @@ interface ILoggingVariables {
 }
 
 export function getLogLevel() {
-  let logLevel = process.env.LOGGING_LEVEL ?? 'info';
+  let logLevel = env.LOGGING_LEVEL;
 
   if (loggingLevelArr.indexOf(logLevel) === -1) {
     // eslint-disable-next-line no-console
@@ -51,25 +52,24 @@ export function getLogLevel() {
   return logLevel;
 }
 
-// TODO: should be moved into a config framework
 function getLoggingVariables(): ILoggingVariables {
-  const env = process.env.NODE_ENV ?? 'local';
+  const nodeEnv = env.NODE_ENV ?? 'local';
 
   // eslint-disable-next-line no-console
-  console.log('Environment: ' + env);
+  console.log('Environment: ' + nodeEnv);
 
-  const hostingPlatform = process.env.HOSTING_PLATFORM ?? 'Docker';
+  const hostingPlatform = env.HOSTING_PLATFORM;
 
   // eslint-disable-next-line no-console
   console.log('Platform: ' + hostingPlatform);
 
-  const tenant = process.env.TENANT ?? 'OS';
+  const tenant = env.TENANT;
 
   // eslint-disable-next-line no-console
   console.log('Tenant: ' + tenant);
 
   return {
-    env,
+    env: nodeEnv,
     level: getLogLevel(),
     hostingPlatform,
     tenant,
@@ -95,7 +95,7 @@ export function createNestLoggingModuleOptions(settings: ILoggerSettings) {
     );
   }
 
-  const transport = ['local', 'test', 'debug'].includes(process.env.NODE_ENV)
+  const transport = ['local', 'test', 'debug'].includes(env.NODE_ENV)
     ? { target: 'pino-pretty' }
     : undefined;
 
@@ -120,7 +120,7 @@ export function createNestLoggingModuleOptions(settings: ILoggerSettings) {
         tenant: values.tenant,
       },
       transport: transport,
-      autoLogging: !['test', 'local'].includes(process.env.NODE_ENV),
+      autoLogging: !['test', 'local'].includes(env.NODE_ENV),
     },
   };
 }

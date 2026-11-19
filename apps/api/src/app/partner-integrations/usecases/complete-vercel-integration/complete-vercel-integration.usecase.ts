@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { EnvironmentEntity, EnvironmentRepository, OrganizationRepository } from '@novu/dal';
-import { AnalyticsService } from '@novu/application-generic';
+import { AnalyticsService, env } from '@novu/application-generic';
 
 import { CompleteVercelIntegrationCommand } from './complete-vercel-integration.command';
 import { GetVercelProjects } from '../get-vercel-projects/get-vercel-projects.usecase';
@@ -91,7 +91,7 @@ export class CompleteVercelIntegration {
   }
 
   private async setEnvironments({ clientKey, projectIds, privateKey, teamId, token }: ISetEnvironment): Promise<void> {
-    const projectApiUrl = `${process.env.VERCEL_BASE_URL}/v9/projects`;
+    const projectApiUrl = `${env.VERCEL_BASE_URL}/v9/projects`;
     const target = ['production', 'preview', 'development'];
     const type = 'encrypted';
 

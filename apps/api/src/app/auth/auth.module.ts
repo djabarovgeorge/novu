@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import * as passport from 'passport';
 
 import { AuthProviderEnum } from '@novu/shared';
-import { AuthService } from '@novu/application-generic';
+import { AuthService, env } from '@novu/application-generic';
 
 import { RolesGuard } from './framework/roles.guard';
 import { JwtStrategy } from './services/passport/jwt.strategy';
@@ -21,7 +21,7 @@ import { RootEnvironmentGuard } from './framework/root-environment-guard.service
 
 const AUTH_STRATEGIES: Provider[] = [];
 
-if (process.env.GITHUB_OAUTH_CLIENT_ID) {
+if (env.GITHUB_OAUTH_CLIENT_ID) {
   AUTH_STRATEGIES.push(GitHubStrategy);
 }
 
@@ -34,7 +34,7 @@ if (process.env.GITHUB_OAUTH_CLIENT_ID) {
       defaultStrategy: 'jwt',
     }),
     JwtModule.register({
-      secretOrKeyProvider: () => process.env.JWT_SECRET as string,
+      secretOrKeyProvider: () => env.JWT_SECRET,
       signOptions: {
         expiresIn: 360000,
       },
@@ -56,7 +56,7 @@ if (process.env.GITHUB_OAUTH_CLIENT_ID) {
 })
 export class AuthModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
-    if (process.env.GITHUB_OAUTH_CLIENT_ID) {
+    if (env.GITHUB_OAUTH_CLIENT_ID) {
       consumer
         .apply(
           passport.authenticate(AuthProviderEnum.GITHUB, {

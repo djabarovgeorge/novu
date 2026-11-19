@@ -1,6 +1,7 @@
 import Redis, { Cluster, ClusterNode, ClusterOptions, NodeRole } from 'ioredis';
 import { ConnectionOptions } from 'tls';
 import { Logger } from '@nestjs/common';
+import { env } from '../../../config';
 
 export { Cluster, ClusterOptions };
 
@@ -40,15 +41,15 @@ export interface IElasticacheClusterProviderConfig {
 export const getElasticacheClusterProviderConfig =
   (): IElasticacheClusterProviderConfig => {
     const redisClusterConfig: IElasticacheClusterConfig = {
-      host: process.env.ELASTICACHE_CLUSTER_SERVICE_HOST,
-      port: process.env.ELASTICACHE_CLUSTER_SERVICE_PORT,
-      ttl: process.env.REDIS_CLUSTER_TTL,
-      password: process.env.REDIS_CLUSTER_PASSWORD,
-      connectTimeout: process.env.REDIS_CLUSTER_CONNECTION_TIMEOUT,
-      keepAlive: process.env.REDIS_CLUSTER_KEEP_ALIVE,
-      family: process.env.REDIS_CLUSTER_FAMILY,
-      keyPrefix: process.env.REDIS_CLUSTER_KEY_PREFIX,
-      tls: process.env.REDIS_CLUSTER_TLS as ConnectionOptions,
+      host: env.ELASTICACHE_CLUSTER_SERVICE_HOST,
+      port: env.ELASTICACHE_CLUSTER_SERVICE_PORT,
+      ttl: env.REDIS_CLUSTER_TTL,
+      password: env.REDIS_CLUSTER_PASSWORD,
+      connectTimeout: env.REDIS_CLUSTER_CONNECTION_TIMEOUT,
+      keepAlive: env.REDIS_CLUSTER_KEEP_ALIVE,
+      family: env.REDIS_CLUSTER_FAMILY,
+      keyPrefix: env.REDIS_CLUSTER_KEY_PREFIX,
+      tls: env.REDIS_CLUSTER_TLS as ConnectionOptions,
     };
 
     const host = redisClusterConfig.host;
@@ -103,7 +104,7 @@ export const getElasticacheCluster = (
     /*
      *  Disabled in Prod as affects performance
      */
-    showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
+    showFriendlyErrorStack: env.NODE_ENV !== 'production',
     slotsRefreshTimeout: 10000,
   };
 

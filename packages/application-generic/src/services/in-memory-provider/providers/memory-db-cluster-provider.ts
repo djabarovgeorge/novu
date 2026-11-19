@@ -1,6 +1,7 @@
 import Redis, { Cluster, ClusterNode, ClusterOptions, NodeRole } from 'ioredis';
 import { ConnectionOptions } from 'tls';
 import { Logger } from '@nestjs/common';
+import { env } from '../../../config';
 
 export { Cluster, ClusterOptions };
 
@@ -42,16 +43,16 @@ export interface IMemoryDbClusterProviderConfig {
 export const getMemoryDbClusterProviderConfig =
   (): IMemoryDbClusterProviderConfig => {
     const redisClusterConfig: IMemoryDbClusterConfig = {
-      host: process.env.MEMORY_DB_CLUSTER_SERVICE_HOST,
-      port: process.env.MEMORY_DB_CLUSTER_SERVICE_PORT,
-      ttl: process.env.MEMORY_DB_CLUSTER_SERVICE_TTL,
-      username: process.env.MEMORY_DB_CLUSTER_SERVICE_USERNAME,
-      password: process.env.MEMORY_DB_CLUSTER_SERVICE_PASSWORD,
-      connectTimeout: process.env.MEMORY_DB_CLUSTER_SERVICE_CONNECTION_TIMEOUT,
-      keepAlive: process.env.MEMORY_DB_CLUSTER_SERVICE_KEEP_ALIVE,
-      family: process.env.MEMORY_DB_CLUSTER_SERVICE_FAMILY,
-      keyPrefix: process.env.MEMORY_DB_CLUSTER_SERVICE_KEY_PREFIX,
-      tls: process.env.MEMORY_DB_CLUSTER_SERVICE_TLS as ConnectionOptions,
+      host: env.MEMORY_DB_CLUSTER_SERVICE_HOST,
+      port: env.MEMORY_DB_CLUSTER_SERVICE_PORT,
+      ttl: env.MEMORY_DB_CLUSTER_SERVICE_TTL,
+      username: env.MEMORY_DB_CLUSTER_SERVICE_USERNAME,
+      password: env.MEMORY_DB_CLUSTER_SERVICE_PASSWORD,
+      connectTimeout: env.MEMORY_DB_CLUSTER_SERVICE_CONNECTION_TIMEOUT,
+      keepAlive: env.MEMORY_DB_CLUSTER_SERVICE_KEEP_ALIVE,
+      family: env.MEMORY_DB_CLUSTER_SERVICE_FAMILY,
+      keyPrefix: env.MEMORY_DB_CLUSTER_SERVICE_KEY_PREFIX,
+      tls: env.MEMORY_DB_CLUSTER_SERVICE_TLS as ConnectionOptions,
     };
 
     const host = redisClusterConfig.host;
@@ -109,7 +110,7 @@ export const getMemoryDbCluster = (
     /*
      *  Disabled in Prod as affects performance
      */
-    showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
+    showFriendlyErrorStack: env.NODE_ENV !== 'production',
     slotsRefreshTimeout: 10000,
   };
 

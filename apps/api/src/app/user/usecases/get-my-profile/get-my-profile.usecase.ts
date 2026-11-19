@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { UserRepository } from '@novu/dal';
 import { GetMyProfileCommand } from './get-my-profile.dto';
 import { createHash } from '../../../shared/helpers/hmac.service';
+import { env } from '@novu/application-generic';
 @Injectable()
 export class GetMyProfileUsecase {
   constructor(private readonly userRepository: UserRepository) {}
@@ -21,8 +22,8 @@ export class GetMyProfileUsecase {
      * Read more about Intercom Identity Verification here
      * https://www.intercom.com/help/en/articles/183-enable-identity-verification-for-web-and-mobile
      */
-    if (process.env.INTERCOM_IDENTITY_VERIFICATION_SECRET_KEY && !profile.servicesHashes?.intercom) {
-      const intercomSecretKey = process.env.INTERCOM_IDENTITY_VERIFICATION_SECRET_KEY as string;
+    if (env.INTERCOM_IDENTITY_VERIFICATION_SECRET_KEY && !profile.servicesHashes?.intercom) {
+      const intercomSecretKey = env.INTERCOM_IDENTITY_VERIFICATION_SECRET_KEY as string;
       const userHashForIntercom = createHash(intercomSecretKey, profile._id);
 
       await this.userRepository.update(

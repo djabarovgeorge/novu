@@ -5,6 +5,7 @@ import { CreateNovuIntegrationsCommand } from './create-novu-integrations.comman
 import { CreateIntegration } from '../create-integration/create-integration.usecase';
 import { CreateIntegrationCommand } from '../create-integration/create-integration.command';
 import { ChannelTypeEnum, EmailProviderIdEnum, SmsProviderIdEnum } from '@novu/shared';
+import { env } from '@novu/application-generic';
 
 @Injectable()
 export class CreateNovuIntegrations {
@@ -12,10 +13,10 @@ export class CreateNovuIntegrations {
 
   async execute(command: CreateNovuIntegrationsCommand): Promise<void> {
     if (
-      !process.env.NOVU_EMAIL_INTEGRATION_API_KEY ||
-      !process.env.NOVU_SMS_INTEGRATION_ACCOUNT_SID ||
-      !process.env.NOVU_SMS_INTEGRATION_TOKEN ||
-      !process.env.NOVU_SMS_INTEGRATION_SENDER
+      !env.NOVU_EMAIL_INTEGRATION_API_KEY ||
+      !env.NOVU_SMS_INTEGRATION_ACCOUNT_SID ||
+      !env.NOVU_SMS_INTEGRATION_TOKEN ||
+      !env.NOVU_SMS_INTEGRATION_SENDER
     ) {
       return;
     }

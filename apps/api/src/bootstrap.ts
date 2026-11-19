@@ -10,23 +10,22 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import * as bodyParser from 'body-parser';
 import * as Sentry from '@sentry/node';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { BullMqService, getErrorInterceptor, Logger as PinoLogger } from '@novu/application-generic';
+import { BullMqService, getErrorInterceptor, Logger as PinoLogger, env, validateEnv } from '@novu/application-generic';
 import { ExpressAdapter } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './app/shared/framework/response.interceptor';
 import { RolesGuard } from './app/auth/framework/roles.guard';
 import { SubscriberRouteGuard } from './app/auth/framework/subscriber-route.guard';
-import { validateEnv } from './config/env-validator';
 
 import * as packageJson from '../package.json';
 
 const extendedBodySizeRoutes = ['/v1/events', '/v1/notification-templates', '/v1/workflows', '/v1/layouts'];
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    dsn: env.SENTRY_DSN,
+    environment: env.NODE_ENV,
     release: `v${packageJson.version}`,
     ignoreErrors: ['Non-Error exception captured'],
     integrations: [
@@ -37,7 +36,7 @@ if (process.env.SENTRY_DSN) {
 }
 
 // Validate the ENV variables after launching SENTRY, so missing variables will report to sentry
-validateEnv();
+validateEnv('api');
 
 export async function bootstrap(expressApp?): Promise<INestApplication> {
   BullMqService.haveProInstalled();
@@ -59,7 +58,7 @@ export async function bootstrap(expressApp?): Promise<INestApplication> {
   server.headersTimeout = 65 * 1000;
   Logger.verbose(`Server headersTimeout: ${server.headersTimeout / 1000}s `);
 
-  if (process.env.SENTRY_DSN) {
+  if (env.SENTRY_DSN) {
     app.use(Sentry.Handlers.requestHandler());
     app.use(Sentry.Handlers.tracingHandler());
   }
@@ -122,13 +121,13 @@ export async function bootstrap(expressApp?): Promise<INestApplication> {
   if (expressApp) {
     await app.init();
   } else {
-    await app.listen(process.env.PORT);
+    await app.listen(env.PORT);
   }
 
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
 
-  Logger.log(`Started application in NODE_ENV=${process.env.NODE_ENV} on port ${process.env.PORT}`);
+  Logger.log(`Started application in NODE_ENV=${env.NODE_ENV} on port ${env.PORT}`);
 
   return app;
 }
@@ -142,12 +141,12 @@ const corsOptionsDelegate = function (req, callback) {
     methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   };
 
-  if (['dev', 'test', 'local'].includes(process.env.NODE_ENV) || isWidgetRoute(req.url) || isBlueprintRoute(req.url)) {
+  if (['dev', 'test', 'local'].includes(env.NODE_ENV ?? '') || isWidgetRoute(req.url) || isBlueprintRoute(req.url)) {
     corsOptions.origin = '*';
   } else {
-    corsOptions.origin = [process.env.FRONT_BASE_URL];
-    if (process.env.WIDGET_BASE_URL) {
-      corsOptions.origin.push(process.env.WIDGET_BASE_URL);
+    corsOptions.origin = [env.FRONT_BASE_URL];
+    if (env.WIDGET_BASE_URL) {
+      corsOptions.origin.push(env.WIDGET_BASE_URL);
     }
   }
   callback(null, corsOptions);

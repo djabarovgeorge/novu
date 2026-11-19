@@ -1,6 +1,7 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
+import { env } from '../config';
 
-const ENCRYPTION_KEY = process.env.STORE_ENCRYPTION_KEY;
+const ENCRYPTION_KEY = env.STORE_ENCRYPTION_KEY;
 const IV_LENGTH = 16;
 const CIPHER_ALGO = 'aes-256-cbc';
 

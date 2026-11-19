@@ -42,6 +42,7 @@ import {
   SwitchEnvironmentCommand,
   SwitchOrganization,
   SwitchOrganizationCommand,
+  env,
 } from '@novu/application-generic';
 
 @Controller('/auth')
@@ -67,7 +68,7 @@ export class AuthController {
   githubAuth() {
     Logger.verbose('Checking Github Auth');
 
-    if (!process.env.GITHUB_OAUTH_CLIENT_ID || !process.env.GITHUB_OAUTH_CLIENT_SECRET) {
+    if (!env.GITHUB_OAUTH_CLIENT_ID || !env.GITHUB_OAUTH_CLIENT_SECRET) {
       throw new ApiException(
         'GitHub auth is not configured, please provide GITHUB_OAUTH_CLIENT_ID and GITHUB_OAUTH_CLIENT_SECRET as env variables'
       );
@@ -178,7 +179,7 @@ export class AuthController {
     @Query('organizationId') organizationId: string,
     @Query('environmentId') environmentId: string
   ) {
-    if (process.env.NODE_ENV !== 'test') throw new NotFoundException();
+    if (env.NODE_ENV !== 'test') throw new NotFoundException();
 
     const user = await this.userRepository.findById(userId);
     if (!user) throw new BadRequestException('No user found');

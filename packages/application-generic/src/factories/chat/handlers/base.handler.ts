@@ -1,6 +1,7 @@
 import { IChatOptions, IChatProvider } from '@novu/stateless';
 import { ChannelTypeEnum } from '@novu/shared';
 import { IChatHandler } from '../interfaces';
+import { env } from '../../../config';
 
 export abstract class BaseChatHandler implements IChatHandler {
   protected provider: IChatProvider;
@@ -17,7 +18,7 @@ export abstract class BaseChatHandler implements IChatHandler {
   abstract buildProvider(credentials);
 
   async send(chatContent: IChatOptions) {
-    if (process.env.NODE_ENV === 'test') {
+    if (env.NODE_ENV === 'test') {
       return {};
     }
 

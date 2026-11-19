@@ -4,6 +4,7 @@ import {
   S3StorageService,
   StorageService,
 } from './storage.service';
+import { env } from '../../config';
 
 export * from './storage-helper.service';
 
@@ -20,7 +21,7 @@ function getStorageServiceClass(service: string) {
 
 export const storageService = {
   provide: StorageService,
-  useClass: getStorageServiceClass(String(process.env.STORAGE_SERVICE)),
+  useClass: getStorageServiceClass(String(env.STORAGE_SERVICE)),
 };
 
 export { StorageService };

@@ -3,6 +3,7 @@ import { ChannelTypeEnum } from '@novu/shared';
 
 import { IMailHandler } from '../interfaces/send.handler.interface';
 import { PlatformException } from '../../../utils/exceptions';
+import { env } from '../../../config';
 
 export abstract class BaseHandler implements IMailHandler {
   protected provider: IEmailProvider;
@@ -19,7 +20,7 @@ export abstract class BaseHandler implements IMailHandler {
   abstract buildProvider(credentials, options);
 
   async send(mailData: IEmailOptions) {
-    if (process.env.NODE_ENV === 'test') {
+    if (env.NODE_ENV === 'test') {
       return {};
     }
 

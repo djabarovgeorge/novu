@@ -5,6 +5,7 @@ import {
   ActiveJobsMetricWorkerService,
   QueueBaseService,
   WorkerOptions,
+  env,
 } from '@novu/application-generic';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
@@ -19,7 +20,7 @@ export class ActiveJobsMetricService {
   public readonly activeJobsMetricWorkerService: ActiveJobsMetricWorkerService;
 
   constructor(@Inject('BULLMQ_LIST') private tokenList: QueueBaseService[]) {
-    if (process.env.NOVU_MANAGED_SERVICE === 'true' && process.env.NEW_RELIC_LICENSE_KEY) {
+    if (env.NOVU_MANAGED_SERVICE === 'true' && env.NEW_RELIC_LICENSE_KEY) {
       this.activeJobsMetricQueueService = new ActiveJobsMetricQueueService();
       this.activeJobsMetricWorkerService = new ActiveJobsMetricWorkerService();
 
@@ -27,7 +28,7 @@ export class ActiveJobsMetricService {
       this.activeJobsMetricWorkerService.createWorker(this.getWorkerProcessor(), this.getWorkerOptions());
 
       this.activeJobsMetricWorkerService.worker.on('completed', async (job) => {
-        await checkingForCronJob(process.env.ACTIVE_CRON_ID);
+        await checkingForCronJob(env.ACTIVE_CRON_ID);
         Logger.verbose({ jobId: job.id }, 'Metric Completed Job', LOG_CONTEXT);
       });
 
@@ -88,7 +89,7 @@ export class ActiveJobsMetricService {
     return async () => {
       return await new Promise<void>(async (resolve, reject): Promise<void> => {
         Logger.verbose('metric job started', LOG_CONTEXT);
-        const deploymentName = process.env.FLEET_NAME ?? 'default';
+        const deploymentName = env.FLEET_NAME;
 
         try {
           for (const queueService of this.tokenList) {

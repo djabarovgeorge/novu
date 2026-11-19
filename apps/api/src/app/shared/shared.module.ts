@@ -38,6 +38,7 @@ import {
   LoggerModule,
   QueuesModule,
   storageService,
+  env,
 } from '@novu/application-generic';
 
 import * as packageJson from '../../../package.json';
@@ -70,7 +71,7 @@ const dalService = {
   provide: DalService,
   useFactory: async () => {
     const service = new DalService();
-    await service.connect(process.env.MONGO_URL);
+    await service.connect(env.MONGO_URL);
 
     return service;
   },

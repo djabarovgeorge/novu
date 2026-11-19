@@ -59,7 +59,6 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.29.2",
     "dotenv": "^8.2.0",
-    "envalid": "^6.0.1",
     "handlebars": "^4.7.7",
     "hat": "^0.0.3",
     "helmet": "^6.0.1",

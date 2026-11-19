@@ -36,6 +36,7 @@ import {
   Filter,
   FilterProcessingDetails,
   IFilterVariables,
+  env,
 } from '@novu/application-generic';
 import { EmailEventStatusEnum } from '@novu/stateless';
 
@@ -407,7 +408,7 @@ export class MessageMatcher extends Filter {
   }
 
   private async buildPayload(variables: IFilterVariables, command: MessageMatcherCommand) {
-    if (process.env.NODE_ENV === 'test') return variables;
+    if (env.NODE_ENV === 'test') return variables;
 
     const payload: Partial<{
       subscriber: SubscriberEntity | null;
@@ -441,7 +442,7 @@ export class MessageMatcher extends Filter {
   }
 
   private async buildHmac(command: MessageMatcherCommand): Promise<string> {
-    if (process.env.NODE_ENV === 'test') return '';
+    if (env.NODE_ENV === 'test') return '';
 
     const environment = await this.environmentRepository.findOne({
       _id: command.environmentId,
@@ -461,7 +462,7 @@ export class MessageMatcher extends Filter {
     let passed = false;
 
     if (child.on === FilterPartTypeEnum.WEBHOOK) {
-      if (process.env.NODE_ENV === 'test') return true;
+      if (env.NODE_ENV === 'test') return true;
 
       const res = await this.getWebhookResponse(child, variables, command);
       passed = this.processFilterEquality({ payload: undefined, webhook: res }, child, filterProcessingDetails);

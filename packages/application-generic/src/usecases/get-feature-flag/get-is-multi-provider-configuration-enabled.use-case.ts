@@ -6,13 +6,14 @@ import {
   FeatureFlagCommand,
 } from './get-feature-flag.command';
 import { GetFeatureFlag } from './get-feature-flag.use-case';
+import { env } from '../../config';
 
 const LOG_CONTEXT = 'GetIsMultiProviderConfigurationEnabled';
 
 @Injectable()
 export class GetIsMultiProviderConfigurationEnabled extends GetFeatureFlag {
   async execute(featureFlagCommand: FeatureFlagCommand): Promise<boolean> {
-    const value = process.env.IS_MULTI_PROVIDER_CONFIGURATION_ENABLED;
+    const value = env.IS_MULTI_PROVIDER_CONFIGURATION_ENABLED;
     const fallbackValue = false;
     const defaultValue = this.prepareBooleanStringFeatureFlag(
       value,

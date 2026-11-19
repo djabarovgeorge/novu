@@ -12,6 +12,7 @@ import {
   OrganizationId,
   UserId,
 } from './types';
+import { env } from '../config';
 
 const LOG_CONTEXT = 'LaunchDarklyService';
 
@@ -22,7 +23,7 @@ export class LaunchDarklyService implements IFeatureFlagsService {
 
   public async initialize(): Promise<void> {
     Logger.log('Launch Darkly service initialized', LOG_CONTEXT);
-    const launchDarklySdkKey = process.env.LAUNCH_DARKLY_SDK_KEY;
+    const launchDarklySdkKey = env.LAUNCH_DARKLY_SDK_KEY;
 
     if (launchDarklySdkKey) {
       this.client = init(launchDarklySdkKey);

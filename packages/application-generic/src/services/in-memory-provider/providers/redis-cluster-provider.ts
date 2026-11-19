@@ -6,6 +6,7 @@ import Redis, {
 } from 'ioredis';
 import { ConnectionOptions } from 'tls';
 import { Logger } from '@nestjs/common';
+import { env } from '../../../config';
 
 export { ChainableCommander, Cluster, ClusterOptions };
 
@@ -45,15 +46,15 @@ export interface IRedisClusterProviderConfig {
 export const getRedisClusterProviderConfig =
   (): IRedisClusterProviderConfig => {
     const redisClusterConfig: IRedisClusterConfig = {
-      host: process.env.REDIS_CLUSTER_SERVICE_HOST,
-      ports: process.env.REDIS_CLUSTER_SERVICE_PORTS,
-      ttl: process.env.REDIS_CLUSTER_TTL,
-      password: process.env.REDIS_CLUSTER_PASSWORD,
-      connectTimeout: process.env.REDIS_CLUSTER_CONNECTION_TIMEOUT,
-      keepAlive: process.env.REDIS_CLUSTER_KEEP_ALIVE,
-      family: process.env.REDIS_CLUSTER_FAMILY,
-      keyPrefix: process.env.REDIS_CLUSTER_KEY_PREFIX,
-      tls: process.env.REDIS_CLUSTER_TLS as ConnectionOptions,
+      host: env.REDIS_CLUSTER_SERVICE_HOST,
+      ports: env.REDIS_CLUSTER_SERVICE_PORTS,
+      ttl: env.REDIS_CLUSTER_TTL,
+      password: env.REDIS_CLUSTER_PASSWORD,
+      connectTimeout: env.REDIS_CLUSTER_CONNECTION_TIMEOUT,
+      keepAlive: env.REDIS_CLUSTER_KEEP_ALIVE,
+      family: env.REDIS_CLUSTER_FAMILY,
+      keyPrefix: env.REDIS_CLUSTER_KEY_PREFIX,
+      tls: env.REDIS_CLUSTER_TLS as ConnectionOptions,
     };
 
     const host = redisClusterConfig.host;
@@ -105,7 +106,7 @@ export const getRedisCluster = (
     /*
      *  Disabled in Prod as affects performance
      */
-    showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
+    showFriendlyErrorStack: env.NODE_ENV !== 'production',
     slotsRefreshTimeout: 2000,
   };
 

@@ -2,14 +2,14 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { IJwtPayload } from '@novu/shared';
-import { AuthService, Instrument, PinoLogger } from '@novu/application-generic';
+import { AuthService, Instrument, PinoLogger, env } from '@novu/application-generic';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService, private logger: PinoLogger) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: env.JWT_SECRET,
     });
   }
 

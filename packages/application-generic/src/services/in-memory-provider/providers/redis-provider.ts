@@ -1,5 +1,6 @@
 import Redis, { RedisOptions, ScanStream } from 'ioredis';
 import { ConnectionOptions } from 'tls';
+import { env } from '../../../config';
 
 export { Redis, RedisOptions, ScanStream };
 
@@ -41,16 +42,16 @@ export interface IRedisProviderConfig {
 
 export const getRedisProviderConfig = (): IRedisProviderConfig => {
   const redisConfig: IRedisConfig = {
-    db: process.env.REDIS_DB_INDEX,
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    ttl: process.env.REDIS_TTL,
-    password: process.env.REDIS_PASSWORD,
-    connectTimeout: process.env.REDIS_CONNECT_TIMEOUT,
-    keepAlive: process.env.REDIS_KEEP_ALIVE,
-    family: process.env.REDIS_FAMILY,
-    keyPrefix: process.env.REDIS_PREFIX,
-    tls: process.env.REDIS_TLS as ConnectionOptions,
+    db: env.REDIS_DB_INDEX,
+    host: env.REDIS_HOST,
+    port: env.REDIS_PORT,
+    ttl: env.REDIS_TTL,
+    password: env.REDIS_PASSWORD,
+    connectTimeout: env.REDIS_CONNECT_TIMEOUT,
+    keepAlive: env.REDIS_KEEP_ALIVE,
+    family: env.REDIS_FAMILY,
+    keyPrefix: env.REDIS_PREFIX,
+    tls: env.REDIS_TLS as ConnectionOptions,
   };
 
   const db = redisConfig.db ? Number(redisConfig.db) : undefined;
@@ -92,7 +93,7 @@ export const getRedisInstance = (): Redis | undefined => {
     /*
      *  Disabled in Prod as affects performance
      */
-    showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
+    showFriendlyErrorStack: env.NODE_ENV !== 'production',
   };
 
   if (port && host) {
