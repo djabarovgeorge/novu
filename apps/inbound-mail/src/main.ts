@@ -6,23 +6,25 @@ import mailin from './server/index';
 import logger from './server/logger';
 import * as Sentry from '@sentry/node';
 import { version } from '../package.json';
+import { env, validateEnv } from '@novu/application-generic';
 
 const LOG_CONTEXT = 'Main';
 
-const env = process.env;
-
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    dsn: env.SENTRY_DSN,
+    environment: env.NODE_ENV,
     release: `v${version}`,
   });
 }
 
+// Validate the env after Sentry starts, so missing variables are reported to Sentry
+validateEnv('inbound-mail');
+
 export default mailin.start(
   {
     port: env.PORT || 25,
-    host: env.HOST || '0.0.0.0',
+    host: env.HOST,
     disableDkim: env.disableDkim,
     disableSpf: env.disableSpf,
     disableSpamScore: env.disableSpamScore,

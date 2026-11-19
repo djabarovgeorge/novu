@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 import { SharedModule } from './shared/shared.module';
 import { HealthModule } from './health/health.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
-import { createNestLoggingModuleOptions, LoggerModule } from '@novu/application-generic';
+import { createNestLoggingModuleOptions, LoggerModule, env } from '@novu/application-generic';
 const packageJson = require('../package.json');
 
 const modules = [
@@ -25,7 +25,7 @@ const modules = [
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const providers: any[] = [AppService];
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   modules.push(RavenModule);
   providers.push({
     provide: APP_INTERCEPTOR,

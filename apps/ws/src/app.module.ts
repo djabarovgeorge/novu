@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RavenInterceptor, RavenModule } from 'nest-raven';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { createNestLoggingModuleOptions, LoggerModule } from '@novu/application-generic';
+import { createNestLoggingModuleOptions, LoggerModule, env } from '@novu/application-generic';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -26,7 +26,7 @@ const modules = [
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const providers: any[] = [AppService];
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   modules.push(RavenModule);
   providers.push({
     provide: APP_INTERCEPTOR,

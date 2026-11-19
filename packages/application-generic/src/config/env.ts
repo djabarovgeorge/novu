@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { envSchema } from './env.schema';
 
 /** Services that call `validateEnv` at boot. Extend when another service adopts it. */
-export type NovuService = 'api' | 'worker';
+export type NovuService = 'api' | 'worker' | 'ws' | 'webhook' | 'inbound-mail';
 
 type RawEnv = NodeJS.ProcessEnv;
 
@@ -12,10 +12,12 @@ interface IEnvVarBase {
   desc: string;
   /**
    * Refuse to boot when the variable is unset or empty.
-   * A list of services, or a predicate over the raw env for conditional requirements.
+   * A list of services, or a predicate over the raw env and service for conditional requirements.
    * A list also makes the typed value non-optional.
    */
-  required?: readonly NovuService[] | ((rawEnv: RawEnv) => boolean);
+  required?:
+    | readonly NovuService[]
+    | ((rawEnv: RawEnv, service: NovuService) => boolean);
   /**
    * Migration hint, e.g. 'Use FOO instead.'. Setting the variable logs a warning at boot.
    * Also add a `@deprecated` JSDoc tag on the key so editors strike through usages.
@@ -129,7 +131,7 @@ export function validateEnv(
       const { required } = spec;
       const isRequired =
         typeof required === 'function'
-          ? required(rawEnv)
+          ? required(rawEnv, service)
           : !!required?.includes(service);
 
       if (isRequired) errors.push(`${key} is required: ${spec.desc}`);

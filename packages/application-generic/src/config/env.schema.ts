@@ -1,5 +1,6 @@
 /*
- * THE SINGLE SOURCE OF TRUTH FOR ENVIRONMENT VARIABLES (api, worker, application-generic).
+ * THE SINGLE SOURCE OF TRUTH FOR ENVIRONMENT VARIABLES OF ALL BACKEND SERVICES
+ * (api, worker, ws, webhook, inbound-mail, application-generic, dal).
  *
  * Read values with `env.X` from '@novu/application-generic', never `process.env.X` (enforced by lint).
  * `env.X` is typed from this file, so an undeclared variable is a compile error.
@@ -12,13 +13,19 @@
  * Remove a variable:    once nothing reads it, delete the key.
  *
  * Each service checks this schema at boot with `validateEnv('<service>')`.
+ *
+ * Exception: @novu/dal sits below application-generic and cannot import `env`, so it reads
+ * process.env directly. Its variables must still be declared here.
  */
-import type { EnvVarSpec } from './env';
+import type { EnvVarSpec, NovuService } from './env';
 
 const URL_PATTERN = /^https?:\/\/.+/;
 const DIGITS_PATTERN = /^\d+$/;
+// Only api and worker store files.
 const storageIs =
-  (provider: 'AWS' | 'GCS' | 'AZURE') => (rawEnv: NodeJS.ProcessEnv) =>
+  (provider: 'AWS' | 'GCS' | 'AZURE') =>
+  (rawEnv: NodeJS.ProcessEnv, service: NovuService) =>
+    (service === 'api' || service === 'worker') &&
     (rawEnv.STORAGE_SERVICE || 'AWS') === provider;
 
 export const envSchema = {
@@ -28,9 +35,9 @@ export const envSchema = {
     choices: ['dev', 'test', 'production', 'ci', 'local', 'staging'],
   },
   PORT: {
-    desc: 'HTTP port the service listens on.',
+    desc: 'HTTP port the service listens on (SMTP port for inbound-mail, default 25 there).',
     type: 'number',
-    required: ['api', 'worker'],
+    required: ['api', 'worker', 'ws', 'webhook'],
   },
   E2E_RUNNER: {
     desc: 'Set by the e2e test runner. Read by the .env loader (src/config/index.ts).',
@@ -55,7 +62,7 @@ export const envSchema = {
   MAIL_SERVER_DOMAIN: { desc: 'Inbound mail domain shown as the MX record.' },
 
   // Security and auth
-  JWT_SECRET: { desc: 'Secret used to sign JWTs.', required: ['api'] },
+  JWT_SECRET: { desc: 'Secret used to sign JWTs.', required: ['api', 'ws'] },
   STORE_ENCRYPTION_KEY: {
     desc: 'Key used to encrypt stored credentials. Exactly 32 characters.',
     pattern: /^.{32}$/,
@@ -89,13 +96,19 @@ export const envSchema = {
     type: 'number',
     default: 500,
   },
+  AUTO_CREATE_INDEXES: {
+    desc: 'Let Mongoose create indexes on startup when "true" (read by @novu/dal).',
+  },
+  DISABLE_TTL: {
+    desc: 'Disable TTL indexes when "true". Also disabled on Novu Cloud (read by @novu/dal).',
+  },
 
   // Redis: single node (queues, self-hosted)
-  REDIS_HOST: { desc: 'Redis host.', required: ['api', 'worker'] },
+  REDIS_HOST: { desc: 'Redis host.', required: ['api', 'worker', 'ws'] },
   REDIS_PORT: {
     desc: 'Redis port.',
     pattern: DIGITS_PATTERN,
-    required: ['api', 'worker'],
+    required: ['api', 'worker', 'ws'],
   },
   REDIS_DB_INDEX: {
     desc: 'Redis database index.',
@@ -229,7 +242,7 @@ export const envSchema = {
   },
   CI_EE_TEST: { desc: 'Load enterprise modules in CI when "true".' },
   BLUEPRINT_CREATOR: {
-    desc: 'Organization ID that owns the workflow blueprints.',
+    desc: 'Organization ID that owns the workflow blueprints (also read by @novu/dal).',
   },
   HOSTING_PLATFORM: {
     desc: 'Hosting platform, added to logs.',
@@ -320,5 +333,27 @@ export const envSchema = {
   },
   STORE_NOTIFICATION_CONTENT: {
     desc: 'Store rendered content of non in-app messages when "true".',
+  },
+
+  // Inbound mail server (mailin options keep their historical lowercase names)
+  HOST: {
+    desc: 'Interface the inbound SMTP server binds to.',
+    default: '0.0.0.0',
+  },
+  disableDkim: {
+    desc: 'Skip DKIM checks. Any non-empty value counts, even "false".',
+  },
+  disableSpf: {
+    desc: 'Skip SPF checks. Any non-empty value counts, even "false".',
+  },
+  disableSpamScore: {
+    desc: 'Skip spam scoring. Any non-empty value counts, even "false".',
+  },
+  enableDnsValidation: { desc: 'Validate sender DNS when set.' },
+  verbose: { desc: 'Verbose mailin logging when set.' },
+  debug: { desc: 'Debug mailin logging when set.' },
+  profile: { desc: 'Profile mailin when set.' },
+  smtpOptions: {
+    desc: 'Passed to mailin unparsed (a string, not an options object). Leave unset.',
   },
 } as const satisfies Record<string, EnvVarSpec>;

@@ -92,6 +92,22 @@ describe('validateEnv', () => {
     );
   });
 
+  it('does not require storage for services without file storage', () => {
+    const minimal = {
+      PORT: '3002',
+      REDIS_HOST: 'localhost',
+      REDIS_PORT: '6379',
+      JWT_SECRET: 'secret',
+    };
+
+    expect(() => validateEnv('ws', minimal)).not.toThrow();
+    expect(() => validateEnv('webhook', { PORT: '3003' })).not.toThrow();
+    expect(() => validateEnv('inbound-mail', {})).not.toThrow();
+    expect(() => validateEnv('ws', { PORT: '3002' })).toThrow(
+      'JWT_SECRET is required'
+    );
+  });
+
   it('reports every problem at once without echoing values', () => {
     const run = () =>
       validateEnv('api', {

@@ -500,9 +500,6 @@ importers:
       dotenv:
         specifier: ^8.6.0
         version: 8.6.0
-      envalid:
-        specifier: ^7.1.0
-        version: 7.3.1
       extend:
         specifier: ^2.0.1
         version: 2.0.2
@@ -1024,9 +1021,6 @@ importers:
       dotenv:
         specifier: ^8.2.0
         version: 8.6.0
-      envalid:
-        specifier: ^7.1.0
-        version: 7.3.1
       jsonwebtoken:
         specifier: 9.0.0
         version: 9.0.0
@@ -1516,9 +1510,6 @@ importers:
       dotenv:
         specifier: ^8.2.0
         version: 8.6.0
-      envalid:
-        specifier: ^7.1.0
-        version: 7.3.1
       helmet:
         specifier: ^6.0.1
         version: 6.1.4
@@ -26976,14 +26967,6 @@ packages:
       escape-string-regexp: 1.0.5
       supports-color: 5.5.0
 
-  /chalk@3.0.0:
-    resolution: {integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==}
-    engines: {node: '>=8'}
-    dependencies:
-      ansi-styles: 4.3.0
-      supports-color: 7.2.0
-    dev: false
-
   /chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
@@ -29854,23 +29837,6 @@ packages:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
     dev: true
-
-  /envalid@6.0.2:
-    resolution: {integrity: sha512-ChJb9a5rjwZ/NkcXfBrzEl5cFZaGLg38N7MlWJkv5qsmSypX2WJe28LkoAWcklC60nKZXYKRlBbsjuJSjYw0Xg==}
-    engines: {node: '>=8.12'}
-    dependencies:
-      chalk: 3.0.0
-      dotenv: 8.6.0
-      meant: 1.0.3
-      validator: 13.9.0
-    dev: false
-
-  /envalid@7.3.1:
-    resolution: {integrity: sha512-KL1YRwn8WcoF/Ty7t+yLLtZol01xr9ZJMTjzoGRM8NaSU+nQQjSWOQKKJhJP2P57bpdakJ9jbxqQX4fGTOicZg==}
-    engines: {node: '>=8.12'}
-    dependencies:
-      tslib: 2.3.1
-    dev: false
 
   /envinfo@7.8.1:
     resolution: {integrity: sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==}
@@ -47472,10 +47438,6 @@ packages:
   /tslib@2.1.0:
     resolution: {integrity: sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==}
     dev: true
-
-  /tslib@2.3.1:
-    resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
-    dev: false
 
   /tslib@2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}

@@ -3,17 +3,20 @@ import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as Sentry from '@sentry/node';
 import { version } from '../package.json';
-import { getErrorInterceptor, Logger } from '@novu/application-generic';
+import { getErrorInterceptor, Logger, env, validateEnv } from '@novu/application-generic';
 
 import { AppModule } from './app.module';
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    dsn: env.SENTRY_DSN,
+    environment: env.NODE_ENV,
     release: `v${version}`,
   });
 }
+
+// Validate the env after Sentry starts, so missing variables are reported to Sentry
+validateEnv('webhook');
 
 export async function bootstrap(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -30,7 +33,7 @@ export async function bootstrap(): Promise<INestApplication> {
     methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   });
 
-  await app.listen(process.env.PORT);
+  await app.listen(env.PORT);
 
   return app;
 }

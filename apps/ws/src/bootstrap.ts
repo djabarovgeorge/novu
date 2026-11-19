@@ -7,17 +7,20 @@ import { RedisIoAdapter } from './shared/framework/redis.adapter';
 import { AppModule } from './app.module';
 import { CONTEXT_PATH } from './config';
 import helmet from 'helmet';
-import { BullMqService } from '@novu/application-generic';
+import { BullMqService, env, validateEnv } from '@novu/application-generic';
 import { version } from '../package.json';
 import { getErrorInterceptor, Logger } from '@novu/application-generic';
 
-if (process.env.SENTRY_DSN) {
+if (env.SENTRY_DSN) {
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    dsn: env.SENTRY_DSN,
+    environment: env.NODE_ENV,
     release: `v${version}`,
   });
 }
+
+// Validate the env after Sentry starts, so missing variables are reported to Sentry
+validateEnv('ws');
 
 export async function bootstrap() {
   BullMqService.haveProInstalled();
@@ -42,5 +45,5 @@ export async function bootstrap() {
 
   app.useWebSocketAdapter(redisIoAdapter);
 
-  await app.listen(process.env.PORT as string);
+  await app.listen(env.PORT);
 }

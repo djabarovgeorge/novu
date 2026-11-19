@@ -1,6 +1,4 @@
 import * as dotenv from 'dotenv';
-import * as envalid from 'envalid';
-import { json, str, port } from 'envalid';
 import { getContextPath, NovuComponentEnum } from '@novu/shared';
 
 dotenv.config();
@@ -30,19 +28,5 @@ switch (process.env.NODE_ENV) {
 const { error } = dotenv.config({ path });
 
 if (error && !process.env.LAMBDA_TASK_ROOT) throw error;
-
-envalid.cleanEnv(process.env, {
-  NODE_ENV: str({
-    choices: ['dev', 'test', 'production', 'ci', 'local'],
-    default: 'local',
-  }),
-  PORT: port(),
-  REDIS_HOST: str(),
-  REDIS_PORT: port(),
-  REDIS_TLS: json({
-    default: undefined,
-  }),
-  JWT_SECRET: str(),
-});
 
 export const CONTEXT_PATH = getContextPath(NovuComponentEnum.WS);
